@@ -7,85 +7,67 @@
 <title>LiteFile</title>
 <style>
 :root{color-scheme:dark;--bg:#101820;--surface:#18232d;--line:#2a3945;--text:#e8edf1;--muted:#94a2ad;--accent:#a8d5c8;font-family:Arial,Helvetica,sans-serif}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text)}button,a{font:inherit}button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}[hidden]{display:none!important}
-header{height:62px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 max(18px,calc((100% - 940px)/2));gap:12px}header strong{font-size:17px;letter-spacing:.2px}header span{font-size:12px;color:var(--muted)}
-main{width:min(940px,100%);margin:0 auto;padding:34px 20px 60px}.crumb{margin-bottom:22px;color:var(--muted);font-size:12px}.crumb button{padding:0;border:0;background:none;color:var(--accent);cursor:pointer}
-h1{margin:0 0 7px;font-size:25px;font-weight:650} .sub{margin:0 0 25px;color:var(--muted);font-size:13px}
-.list{border-top:1px solid var(--line)}.row{min-height:68px;padding:12px 13px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:13px;background:transparent}.row:hover{background:var(--surface)}
-.folder-icon,.file-icon{width:38px;height:38px;flex:0 0 38px;display:grid;place-items:center;border-radius:7px;background:#22313c;color:var(--accent);font-size:19px}
-.item-main{min-width:0;flex:1}.item-title{overflow:hidden;font-size:14px;font-weight:600;text-overflow:ellipsis;white-space:nowrap}.item-sub{margin-top:5px;color:var(--muted);font-size:11px}
-.open{border:0;background:none;color:var(--text);text-align:left;cursor:pointer;padding:0;min-width:0;flex:1}.share{width:36px;height:36px;flex:0 0 36px;border:1px solid var(--line);border-radius:7px;background:transparent;color:var(--muted);font-size:17px;cursor:pointer}.share:hover{border-color:var(--accent);color:var(--accent)}
-.empty{padding:30px 14px;color:var(--muted);font-size:13px}
-#reader{width:100%}.reader-head{display:flex;align-items:center;gap:10px;margin:0 0 10px;min-height:44px}.back{width:40px;height:40px;flex:0 0 40px;padding:0;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--text);cursor:pointer;font-size:22px;line-height:1}.reader-title{min-width:0;flex:1;font-size:16px;font-weight:650;line-height:1.25;overflow-wrap:anywhere}.reader-actions{display:flex;gap:7px;flex:0 0 auto}.reader-actions button{width:40px;height:40px;padding:0;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--text);font-size:20px;cursor:pointer}.page-tools{display:flex;align-items:center;justify-content:flex-end;gap:7px;margin:0 0 8px}.page-tools label{font-size:12px;color:var(--muted)}.page-tools input{width:66px;padding:7px 8px;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--text);font:inherit;font-size:13px}.page-tools button{padding:7px 11px;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--text);font:inherit;font-size:12px;cursor:pointer}.viewer{display:block;width:100%;height:calc(100dvh - 118px);min-height:360px;border:0;background:#fff}.viewer:fullscreen{width:100vw;height:100vh;min-height:100vh;border:0;background:#fff}body.reading>header{display:none}body.reading>main{width:100%;max-width:none;margin:0;padding:10px 12px 0}
-@media(max-width:600px){header{height:55px}main{padding:24px 14px 40px}h1{font-size:22px}.row{padding:10px 7px;gap:10px}.reader-head{gap:8px;margin-bottom:8px}.reader-title{font-size:14px}.reader-actions{gap:6px}.reader-actions button,.back{width:38px;height:38px;flex-basis:38px}.viewer{height:calc(100dvh - 116px);min-height:320px}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text)}button,a{font:inherit}button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+header{height:62px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 max(18px,calc((100% - 940px)/2));gap:12px}header strong{font-size:20px}header span{font-size:13px;color:var(--muted)}
+main{width:min(940px,100%);margin:0 auto;padding:30px 20px 50px}.crumb{margin-bottom:24px;color:var(--muted);font-size:13px}
+h1{margin:0 0 7px;font-size:28px;font-weight:650}.sub{margin:0 0 25px;color:var(--muted);font-size:15px}
+.list{border-top:1px solid var(--line)}.row{min-height:76px;padding:12px 13px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:13px}
+.folder-icon,.file-icon{width:44px;height:44px;flex:0 0 44px;display:grid;place-items:center;border-radius:9px;background:#22313c;color:var(--accent)}
+.folder-icon svg,.file-icon svg,.share svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.item-main{min-width:0;flex:1}.item-title{overflow:hidden;font-size:16px;font-weight:600;text-overflow:ellipsis;white-space:nowrap}.item-sub{margin-top:5px;color:var(--muted);font-size:13px}
+.open{display:block;width:100%;border:0;background:none;color:var(--text);text-align:left;cursor:pointer;padding:0;min-width:0;flex:1;text-decoration:none}
+.share{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border:1px solid var(--line);border-radius:9px;background:transparent;color:var(--muted);cursor:pointer}.share:hover{border-color:var(--accent);color:var(--accent)}
+.folder-back{display:inline-flex;align-items:center;gap:8px;margin:0 0 20px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--text);text-decoration:none;font-size:14px}
+.empty{padding:26px 14px;color:var(--muted);font-size:14px}
+@media(max-width:600px){header{height:58px}main{padding:24px 14px 40px}h1{font-size:26px}.row{padding:11px 7px;gap:11px}.item-title{font-size:15px}}
 </style>
 </head>
 <body>
 <header><strong>LiteFile</strong><span>Personal document library</span></header>
 <main>
-<section id="library">
 <div class="crumb">MY LIBRARY</div>
+<a class="folder-back" id="folderBack" href="index.html" hidden><span aria-hidden="true">←</span> Folders</a>
 <h1 id="heading">Folders</h1>
 <p class="sub" id="description">Choose a folder to see its documents.</p>
 <div class="list" id="items"></div>
-</section>
-<section id="reader" hidden>
-<div class="reader-head">
-<button class="back" id="back" aria-label="Back" title="Back">←</button>
-<div class="reader-title" id="docTitle"></div>
-<div class="reader-actions">
-<button id="shareReader" type="button" aria-label="Share document" title="Share">↗</button>
-<button id="fullScreen" type="button" aria-label="Full screen" title="Full screen">⛶</button>
-</div>
-</div>
-<div class="page-tools"><label for="pageNumber">Page</label><input id="pageNumber" type="number" min="1" step="1" inputmode="numeric" value="1" aria-label="Page number"><button id="goPage" type="button">Go</button></div>
-<iframe class="viewer" id="viewer" title="Document reader" allowfullscreen></iframe>
-</section>
 </main>
 <script src="documents.js"></script>
 <script>
 (function(){
 "use strict";
 var docs=Array.isArray(window.LITEFILE_DOCS)?window.LITEFILE_DOCS:[];
-var activeFolder=null,activeDoc=null;
 var $=function(id){return document.getElementById(id)};
 function esc(s){return String(s||"").replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
-function folderNames(){return Array.from(new Set(docs.map(function(d){return d.folder||"Unsorted"}))).sort(function(a,b){return a.localeCompare(b)})}
-function shareUrl(d){var u=new URL(location.href);u.hash="doc="+encodeURIComponent(d.id);return u.href}
+function shareUrl(d){return new URL("reader.html?id="+encodeURIComponent(d.id),location.href).href}
 function share(d){
 var url=shareUrl(d),data={title:d.title,text:"Read "+d.title+" in LiteFile",url:url};
 if(navigator.share){navigator.share(data).catch(function(e){if(e.name!=="AbortError")copy(url)})}else copy(url)
 }
-function copy(url){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(function(){alert("Share link copied!")}).catch(function(){prompt("Copy this link:",url)})}else prompt("Copy this link:",url)}
-function showFolders(){
-activeFolder=null;document.body.classList.remove("reading");$("reader").hidden=true;$("library").hidden=false;$("heading").textContent="Folders";$("description").textContent="Choose a folder to see its documents.";
-var names=folderNames();$("items").innerHTML=names.length?names.map(function(name){var count=docs.filter(function(d){return(d.folder||"Unsorted")===name}).length;return '<div class="row"><div class="folder-icon">▰</div><button class="open item-main" data-folder="'+esc(name)+'"><div class="item-title">'+esc(name)+'</div><div class="item-sub">'+count+' '+(count===1?"document":"documents")+'</div></button><span class="item-sub">Open ›</span></div>'}).join(""):'<div class="empty">No folders yet. Add documents in documents.js.</div>';
+function copy(url){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(function(){alert("Share link copied")}).catch(function(){prompt("Copy link:",url)})}else prompt("Copy link:",url)}
+function folders(){
+$("folderBack").hidden=true;$("heading").textContent="Folders";$("description").textContent="Choose a folder to see its documents.";
+var names=Array.from(new Set(docs.map(function(d){return d.folder||"Unsorted"}))).sort();
+$("items").innerHTML=names.length?names.map(function(name){
+var count=docs.filter(function(d){return(d.folder||"Unsorted")===name}).length;
+return '<div class="row"><div class="folder-icon"><svg viewBox="0 0 24 24"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5H10l2 2h7.5A1.5 1.5 0 0 1 21 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5z"/></svg></div><button class="open item-main" data-folder="'+esc(name)+'"><div class="item-title">'+esc(name)+'</div><div class="item-sub">'+count+' '+(count===1?"document":"documents")+'</div></button></div>'
+}).join(""):'<div class="empty">No folders yet. Add documents in documents.js.</div>';
 }
-function showFolder(name){
-activeFolder=name;document.body.classList.remove("reading");$("heading").textContent=name;$("description").textContent="Documents in this folder.";$("library").hidden=false;$("reader").hidden=true;
+function folder(name){
+$("folderBack").hidden=false;$("heading").textContent=name;$("description").textContent="Documents in this folder.";
+$("folderBack").href="index.html";
 var entries=docs.filter(function(d){return(d.folder||"Unsorted")===name});
-$("items").innerHTML='<div class="row"><button class="back" id="folderBack">← Folders</button></div>'+entries.map(function(d){return '<div class="row"><div class="file-icon">▤</div><button class="open item-main" data-doc="'+esc(d.id)+'"><div class="item-title">'+esc(d.title)+'</div><div class="item-sub">'+esc(d.description||"Open document")+'</div></button><button class="share" data-share="'+esc(d.id)+'" title="Share document" aria-label="Share '+esc(d.title)+'">↗</button></div>'}).join("");
-$("folderBack").addEventListener("click",showFolders);
-}
-function loadPage(page){if(!activeDoc)return;var n=Math.floor(Number(page));if(!Number.isFinite(n)||n<1){alert("Enter a valid page number (1 or higher).");return;}try{var u=new URL(activeDoc.embedUrl);u.searchParams.set("start_page",String(n));$("viewer").src=u.toString();$("pageNumber").value=String(n);}catch(e){alert("Could not set the page number for this document.");}}
-function showDoc(id){
-var d=docs.find(function(x){return x.id===id});if(!d)return showFolders();
-activeDoc=d;document.body.classList.add("reading");$("library").hidden=true;$("reader").hidden=false;$("docTitle").textContent=d.title;$("original").href=d.sourceUrl||"https://www.scribd.com/";$("pageNumber").value="1";loadPage(1);history.replaceState(null,"",shareUrl(d));
+$("items").innerHTML=entries.length?entries.map(function(d){
+return '<div class="row"><div class="file-icon"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6zM14 3v5h5M9 12h6M9 16h6"/></svg></div><a class="open item-main" href="reader.html?id='+encodeURIComponent(d.id)+'"><div class="item-title">'+esc(d.title)+'</div><div class="item-sub">'+esc(d.description||"Open document")+'</div></a><button class="share" data-share="'+esc(d.id)+'" aria-label="Share '+esc(d.title)+'" title="Share"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.7 6.6-4.4M8.7 13.3l6.6 4.4"/></svg></button></div>'
+}).join(""):'<div class="empty">No documents in this folder yet.</div>';
 }
 $("items").addEventListener("click",function(e){
-var f=e.target.closest("[data-folder]"),d=e.target.closest("[data-doc]"),s=e.target.closest("[data-share]");
-if(f)showFolder(f.getAttribute("data-folder"));
-if(d)showDoc(d.getAttribute("data-doc"));
-if(s){var item=docs.find(function(x){return x.id===s.getAttribute("data-share")});if(item)share(item)}
+var f=e.target.closest("[data-folder]"),s=e.target.closest("[data-share]");
+if(f){folder(f.getAttribute("data-folder"));history.replaceState(null,"","#folder="+encodeURIComponent(f.getAttribute("data-folder")))}
+if(s){var d=docs.find(function(x){return x.id===s.getAttribute("data-share")});if(d)share(d)}
 });
-$("back").addEventListener("click",function(){if(activeFolder)showFolder(activeFolder);else showFolders();history.replaceState(null,"",location.pathname+location.search)});
-$("shareReader").addEventListener("click",function(){if(activeDoc)share(activeDoc)});
-$("goPage").addEventListener("click",function(){loadPage($("pageNumber").value)});
-$("pageNumber").addEventListener("keydown",function(e){if(e.key==="Enter")loadPage(this.value)});
-$("fullScreen").addEventListener("click",function(){var frame=$("viewer");var enter=frame.requestFullscreen||frame.webkitRequestFullscreen;if(enter){var result=enter.call(frame);if(result&&result.catch)result.catch(function(){alert("Fullscreen is not supported by this browser.")})}else{alert("Fullscreen is not supported by this browser.")}});
-window.addEventListener("hashchange",function(){var m=location.hash.match(/^#doc=(.+)$/);if(m)showDoc(decodeURIComponent(m[1]))});
-showFolders();
-var initial=location.hash.match(/^#doc=(.+)$/);if(initial)showDoc(decodeURIComponent(initial[1]));
+$("folderBack").addEventListener("click",function(e){e.preventDefault();history.replaceState(null,"",location.pathname+location.search);folders()});
+var m=location.hash.match(/^#folder=(.*)$/);
+if(m){var name=decodeURIComponent(m[1]);if(docs.some(function(d){return(d.folder||"Unsorted")===name}))folder(name);else folders()}else folders();
 }());
 </script>
 </body>
