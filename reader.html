@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101820">
+<title>LiteFile Reader</title>
+<style>
+:root{color-scheme:dark;--bg:#101820;--surface:#18232d;--line:#2a3945;--text:#e8edf1;--muted:#94a2ad;font-family:Arial,Helvetica,sans-serif}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:var(--bg);color:var(--text)}body{padding:10px 12px 0;overflow:hidden}
+.top{height:42px;display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.icon-btn{width:40px;height:40px;flex:0 0 40px;display:grid;place-items:center;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--text);padding:0;cursor:pointer}
+.icon-btn svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.title{min-width:0;flex:1;font-size:15px;font-weight:650;line-height:1.2;overflow-wrap:anywhere}
+.pagebar{height:34px;display:flex;justify-content:flex-end;align-items:center;gap:7px;margin-bottom:7px}
+.pagebar label{font-size:12px;color:var(--muted)}
+.pagebar input{width:66px;height:32px;padding:4px 8px;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--text);font:inherit;font-size:13px}
+.pagebar button{height:32px;padding:0 12px;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--text);font:inherit;font-size:12px}
+iframe{display:block;width:100%;height:calc(100dvh - 103px);min-height:240px;border:0;background:#fff}
+iframe:fullscreen{width:100vw;height:100vh;min-height:100vh}
+@media(min-width:700px){body{max-width:1100px;margin:0 auto}.top{margin-bottom:10px}iframe{height:calc(100dvh - 108px)}}
+</style>
+</head>
+<body>
+<div class="top">
+<button class="icon-btn" id="back" aria-label="Back" title="Back"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+<div class="title" id="title">Loading document…</div>
+<button class="icon-btn" id="share" aria-label="Share document" title="Share"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.7 6.6-4.4M8.7 13.3l6.6 4.4"/></svg></button>
+<button class="icon-btn" id="fullscreen" aria-label="Full screen" title="Full screen"><svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m13-5h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></button>
+</div>
+<div class="pagebar"><label for="page">Page</label><input id="page" type="number" min="1" step="1" inputmode="numeric" value="1"><button id="go">Go</button></div>
+<iframe id="viewer" title="Document" allowfullscreen></iframe>
+<script src="documents.js"></script>
+<script>
+(function(){
+"use strict";
+var docs=Array.isArray(window.LITEFILE_DOCS)?window.LITEFILE_DOCS:[];
+var params=new URLSearchParams(location.search);
+var id=params.get("id");
+var doc=docs.find(function(d){return d.id===id});
+var page=params.get("page")||"1";
+var $=function(id){return document.getElementById(id)};
+if(!doc){$("title").textContent="Document not found";$("viewer").hidden=true;$("page").disabled=true;$("go").disabled=true;return}
+document.title=doc.title+" · LiteFile";
+$("title").textContent=doc.title;
+function loadPage(value){
+var n=Math.floor(Number(value));
+if(!Number.isFinite(n)||n<1){alert("Enter a valid page number.");return}
+try{var url=new URL(doc.embedUrl);url.searchParams.set("start_page",String(n));$("viewer").src=url.toString();$("page").value=String(n);params.set("page",String(n));history.replaceState(null,"",location.pathname+"?"+params.toString())}
+catch(e){alert("Could not open that page.")}
+}
+function share(){
+var url=location.href;
+var data={title:doc.title,text:"Read "+doc.title+" in LiteFile",url:url};
+if(navigator.share){navigator.share(data).catch(function(e){if(e.name!=="AbortError")copy(url)})}else copy(url)
+}
+function copy(url){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(function(){alert("Link copied")}).catch(function(){prompt("Copy link:",url)})}else prompt("Copy link:",url)}
+$("back").addEventListener("click",function(){location.href="index.html#folder="+encodeURIComponent(doc.folder||"Unsorted")});
+$("share").addEventListener("click",share);
+$("fullscreen").addEventListener("click",function(){var frame=$("viewer");var fn=frame.requestFullscreen||frame.webkitRequestFullscreen;if(fn){var result=fn.call(frame);if(result&&result.catch)result.catch(function(){alert("Fullscreen is not supported by this browser.")})}});
+$("go").addEventListener("click",function(){loadPage($("page").value)});
+$("page").addEventListener("keydown",function(e){if(e.key==="Enter")loadPage(this.value)});
+loadPage(page);
+}());
+</script>
+</body>
+</html>
