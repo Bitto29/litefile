@@ -17,7 +17,7 @@ h1{margin:0 0 7px;font-size:25px;font-weight:650} .sub{margin:0 0 25px;color:var
 .open{border:0;background:none;color:var(--text);text-align:left;cursor:pointer;padding:0;min-width:0;flex:1}.share{width:36px;height:36px;flex:0 0 36px;border:1px solid var(--line);border-radius:7px;background:transparent;color:var(--muted);font-size:17px;cursor:pointer}.share:hover{border-color:var(--accent);color:var(--accent)}
 .empty{padding:30px 14px;color:var(--muted);font-size:13px}
 #reader{width:100%}.reader-head{display:flex;align-items:center;gap:12px;margin-bottom:15px}.back{padding:9px 12px;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--text);cursor:pointer;font-size:12px}.reader-title{min-width:0;flex:1;font-size:15px;font-weight:600;overflow-wrap:anywhere}.reader-actions{display:flex;gap:7px}.reader-actions a,.reader-actions button{padding:9px 11px;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--text);text-decoration:none;font-size:11px;white-space:nowrap;cursor:pointer}
-.viewer{width:100%;height:calc(100vh - 170px);min-height:430px;border:0;background:#fff}
+.viewer{width:100%;height:calc(100vh - 170px);min-height:430px;border:0;background:#fff}\n.viewer:fullscreen{width:100vw;height:100vh;min-height:100vh;border:0;background:#fff}
 footer{margin-top:18px;color:#71808c;font-size:11px;line-height:1.6}
 @media(max-width:600px){header{height:55px}main{padding:24px 14px 40px}h1{font-size:22px}.row{padding:10px 7px;gap:10px}.reader-head{flex-wrap:wrap}.reader-title{order:2;flex-basis:100%}.reader-actions{margin-left:auto}.viewer{height:calc(100dvh - 190px);min-height:380px}}
 </style>
@@ -36,7 +36,7 @@ footer{margin-top:18px;color:#71808c;font-size:11px;line-height:1.6}
 <button class="back" id="back">← Back</button>
 <div class="reader-title" id="docTitle"></div>
 <div class="reader-actions">
-<button id="shareReader" type="button">Share</button>
+<button id="shareReader" type="button">Share</button>\n<button id="fullScreen" type="button" aria-label="View document fullscreen">⛶ Full screen</button>
 <a id="original" target="_blank" rel="noopener noreferrer">Scribd ↗</a>
 </div>
 </div>
@@ -80,7 +80,7 @@ if(d)showDoc(d.getAttribute("data-doc"));
 if(s){var item=docs.find(function(x){return x.id===s.getAttribute("data-share")});if(item)share(item)}
 });
 $("back").addEventListener("click",function(){if(activeFolder)showFolder(activeFolder);else showFolders();history.replaceState(null,"",location.pathname+location.search)});
-$("shareReader").addEventListener("click",function(){if(activeDoc)share(activeDoc)});
+$("shareReader").addEventListener("click",function(){if(activeDoc)share(activeDoc)});\n$("fullScreen").addEventListener("click",function(){var frame=$("viewer");var enter=frame.requestFullscreen||frame.webkitRequestFullscreen;if(enter){var result=enter.call(frame);if(result&&result.catch)result.catch(function(){alert("Fullscreen is not supported by this browser.")})}else{alert("Fullscreen is not supported by this browser.")}});
 window.addEventListener("hashchange",function(){var m=location.hash.match(/^#doc=(.+)$/);if(m)showDoc(decodeURIComponent(m[1]))});
 showFolders();
 var initial=location.hash.match(/^#doc=(.+)$/);if(initial)showDoc(decodeURIComponent(initial[1]));
