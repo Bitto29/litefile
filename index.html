@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090e18">
+<meta name="description" content="A lightweight dark-mode library for your Scribd study documents.">
+<title>LiteFile · Your study shelf</title>
+<style>
+:root{color-scheme:dark;--bg:#090e18;--panel:#111b2a;--panel2:#142136;--line:#26364e;--text:#edf4ff;--muted:#91a2bb;--mint:#65dfc2;--soft:#c2cee0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:var(--bg);color:var(--text)}button,input{font:inherit}button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--mint);outline-offset:3px}a{color:inherit}[hidden]{display:none!important}
+.sidebar{position:fixed;inset:0 auto 0 0;z-index:5;width:245px;padding:23px 16px;border-right:1px solid var(--line);background:#0c1320;display:flex;flex-direction:column}
+.brand{display:flex;align-items:center;gap:10px;margin:0 0 35px 5px}.brand-mark{width:36px;height:36px;border-radius:11px;background:var(--mint);color:#071713;display:grid;place-items:center;font-weight:900;font-size:19px}.brand-name{font-size:16px;font-weight:850}.brand-sub{color:#8495af;font-size:9px;letter-spacing:1.3px;text-transform:uppercase;margin-top:3px}
+.side-label{padding:0 10px;margin-bottom:10px;color:#71839e;font-size:10px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase}.nav-list{display:grid;gap:5px}.nav-button{width:100%;min-height:41px;padding:0 11px;border:1px solid transparent;border-radius:9px;background:transparent;color:var(--soft);display:flex;align-items:center;gap:10px;text-align:left;cursor:pointer}.nav-button:hover{background:#152236}.nav-button.active{color:var(--mint);background:#14292c;border-color:#24464a}.nav-count{margin-left:auto;color:#798ba6;font-size:11px}.side-bottom{margin-top:auto}.tip{padding:14px;border:1px solid #2a414b;border-radius:12px;background:linear-gradient(145deg,#142831,#111a2a)}.tip b{color:var(--mint);font-size:10px;letter-spacing:1px;text-transform:uppercase}.tip p{margin:8px 0 0;color:#aebbd0;font-size:11px;line-height:1.6}.tip button{margin-top:10px;padding:0;border:0;background:none;color:var(--mint);font-size:11px;font-weight:750;cursor:pointer}.side-foot{padding:14px 7px 0;color:#63758f;font-size:10px}
+.main{min-height:100vh;margin-left:245px}.topbar{position:sticky;top:0;z-index:4;min-height:72px;padding:0 34px;border-bottom:1px solid var(--line);background:rgba(9,14,24,.94);display:flex;align-items:center;gap:15px;backdrop-filter:blur(12px)}.top-caption{color:var(--muted);font-size:11px}.mobile-brand{display:none;align-items:center;gap:8px;font-weight:800}.mobile-brand .brand-mark{width:30px;height:30px;border-radius:9px;font-size:16px}.search-wrap{position:relative;width:min(420px,48vw);margin-left:auto}.search-wrap span{position:absolute;top:50%;left:13px;transform:translateY(-50%);color:#8294ae}.search{width:100%;height:40px;padding:0 12px 0 36px;border:1px solid var(--line);border-radius:10px;background:#111b2a;color:var(--text);font-size:12px}.search::placeholder{color:#7889a2}.help-btn{width:37px;height:37px;border:1px solid var(--line);border-radius:9px;background:var(--panel);color:#c8d4e6;cursor:pointer}
+.content{max-width:1320px;margin:auto;padding:32px 34px 55px}.welcome{min-height:166px;padding:28px 30px;border:1px solid #2c4851;border-radius:17px;background:radial-gradient(circle at 90% 16%,rgba(77,177,164,.17),transparent 33%),linear-gradient(115deg,#132630,#111b2b 70%);display:flex;justify-content:space-between;align-items:center;gap:20px;box-shadow:0 16px 45px rgba(0,0,0,.2)}.eyebrow{margin-bottom:10px;color:var(--mint);font-size:10px;font-weight:850;letter-spacing:1.6px;text-transform:uppercase}.welcome h1{margin:0;font-size:clamp(25px,3.2vw,35px);letter-spacing:-1px;line-height:1.15}.welcome p{max-width:500px;margin:11px 0 0;color:#a9b9ce;font-size:12px;line-height:1.7}.stats{display:flex;gap:9px;flex-shrink:0}.stat{min-width:92px;padding:12px 14px;border:1px solid #36505a;border-radius:12px;background:#09151c55}.stat strong{display:block;font-size:22px}.stat span{display:block;margin-top:4px;color:#91a7b6;font-size:10px}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:31px 0 15px}.section-head h2{margin:0;font-size:18px}.section-head p{margin:5px 0 0;color:var(--muted);font-size:11px}.result-count{color:#8292aa;font-size:11px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.doc-card{min-width:0;padding:15px;border:1px solid var(--line);border-radius:13px;background:linear-gradient(145deg,#121d2c,#101827);cursor:pointer;transition:border-color .14s,transform .14s}.doc-card:hover{border-color:#456e66;transform:translateY(-2px);background:#142134}.card-top{display:flex;justify-content:space-between;align-items:flex-start}.file-icon{width:41px;height:46px;border:1px solid #3a526b;border-radius:9px;background:#17263a;color:#a4c8ff;display:grid;place-items:center;font-size:20px}.fav{width:30px;height:30px;border:0;border-radius:8px;background:none;color:#7e91aa;font-size:18px;cursor:pointer}.fav.active,.fav:hover{color:#f4cd73;background:#f4cd7312}.doc-title{overflow:hidden;margin:14px 0 6px;font-size:14px;line-height:1.4;text-overflow:ellipsis}.doc-description{display:-webkit-box;overflow:hidden;min-height:34px;margin:0;color:#91a2bb;font-size:11px;line-height:1.55;-webkit-line-clamp:2;-webkit-box-orient:vertical}.card-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:13px;padding-top:11px;border-top:1px solid #243249}.folder-chip{max-width:68%;overflow:hidden;padding:5px 8px;border:1px solid #2a484b;border-radius:7px;background:#14292c;color:#91d7c7;font-size:10px;text-overflow:ellipsis;white-space:nowrap}.open-label{color:#bac9da;font-size:10px;font-weight:700;white-space:nowrap}
+.empty{grid-column:1/-1;padding:45px 20px;border:1px dashed #34445b;border-radius:13px;text-align:center}.empty h3{margin:10px 0 5px;font-size:15px}.empty p{margin:0;color:var(--muted);font-size:11px}.note{display:flex;gap:11px;margin-top:23px;padding:14px 16px;border:1px solid #283950;border-radius:11px;background:#101827;color:#91a2bb;font-size:11px;line-height:1.6}.note strong{color:#cbd8e9}.note span{color:var(--mint)}
+.reader-content{max-width:1500px;margin:auto;padding:20px 27px 34px}.reader-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:15px}.back,.tool{min-height:37px;padding:0 12px;border:1px solid var(--line);border-radius:9px;background:#111b2a;color:#c4d1e3;font-size:11px;font-weight:650;cursor:pointer}.back:hover,.tool:hover{border-color:#4b7167;color:var(--mint)}.reader-actions{display:flex;flex-wrap:wrap;gap:7px}.reader-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px}.reader-heading h1{margin:0;font-size:clamp(17px,2vw,22px)}.reader-heading p{margin:5px 0 0;color:var(--muted);font-size:11px}.stage{position:relative;overflow:hidden;min-height:510px;border:1px solid #2b3c53;border-radius:12px;background:#e8eaed;box-shadow:0 15px 42px #0004}.reader-host{min-height:510px}.reader-host iframe{display:block;width:100%;height:clamp(510px,78vh,1000px);border:0;background:#e8eaed}.loading{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#e8eaed;color:#293647;pointer-events:none}.loading p{margin:0;font-size:12px}.spinner{width:27px;height:27px;border:3px solid #cbd2da;border-top-color:#398f81;border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.fallback{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;padding:13px 15px;border:1px solid var(--line);border-radius:10px;background:#101827}.fallback p{margin:0;color:#91a2bb;font-size:11px;line-height:1.6}.fallback strong{color:#cbd8e9}.external{display:inline-flex;align-items:center;justify-content:center;min-height:35px;padding:0 13px;border-radius:8px;background:var(--mint);color:#061612;text-decoration:none;font-size:11px;font-weight:850;white-space:nowrap}.reader-note{margin-top:12px;color:#71829a;font-size:10px;line-height:1.6}
+.backdrop{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:16px;background:#02060cc9}.modal{width:min(540px,100%);max-height:85vh;overflow:auto;padding:22px;border:1px solid #334761;border-radius:15px;background:#111b2a;box-shadow:0 18px 55px #0008}.modal-head{display:flex;justify-content:space-between;align-items:center}.modal h2{margin:0;font-size:17px}.close{width:31px;height:31px;border:1px solid var(--line);border-radius:8px;background:#19263a;color:#d2dceb;cursor:pointer}.modal p,.modal li{color:#a1b0c6;font-size:11px;line-height:1.7}.modal ol{padding-left:18px}.modal code{color:var(--mint)}.sample{overflow:auto;padding:12px;border:1px solid #2c3e55;border-radius:8px;background:#080e17;color:#a9d9ce;font:11px/1.6 ui-monospace,Consolas,monospace;white-space:pre}.copy{min-height:35px;padding:0 12px;border:1px solid #3b6d62;border-radius:8px;background:#17342f;color:var(--mint);font-size:11px;font-weight:750;cursor:pointer}.small{color:#71839c!important;font-size:10px!important}
+@media(max-width:1080px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.content{padding-right:24px;padding-left:24px}.topbar{padding:0 24px}}
+@media(max-width:740px){.sidebar{position:static;width:100%;height:auto;display:block;padding:12px 13px 9px;border-right:0;border-bottom:1px solid var(--line)}.brand{margin:0 0 11px 2px}.brand-mark{width:31px;height:31px}.side-label,.side-bottom{display:none}.nav-list{display:flex;overflow-x:auto;gap:5px;scrollbar-width:none}.nav-list::-webkit-scrollbar{display:none}.nav-button{width:auto;min-height:34px;flex:0 0 auto;padding:0 9px;gap:7px;font-size:10px}.main{margin-left:0}.topbar{position:static;min-height:57px;padding:9px 13px;gap:9px}.top-caption{display:none}.mobile-brand{display:flex;font-size:13px}.search-wrap{flex:1;width:auto}.search{height:37px;font-size:11px}.help-btn{width:34px;height:34px;flex-shrink:0}.content{padding:16px 13px 30px}.welcome{display:block;min-height:0;padding:21px 18px}.welcome h1{font-size:26px}.welcome p{font-size:11px}.stats{margin-top:16px}.stat{min-width:0;flex:1;padding:10px 12px}.stat strong{font-size:19px}.section-head{margin-top:24px}.grid{grid-template-columns:1fr;gap:9px}.doc-card{padding:13px}.reader-content{padding:13px 9px 25px}.reader-top{align-items:flex-start;flex-direction:column}.reader-actions{width:100%}.tool{flex:1;padding:0 7px}.reader-heading{align-items:flex-start;flex-direction:column}.stage,.reader-host{min-height:420px}.reader-host iframe{height:clamp(420px,72svh,850px)}.fallback{align-items:stretch;flex-direction:column}.external{width:100%}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<aside class="sidebar" aria-label="Library navigation">
+  <div class="brand"><div class="brand-mark">L</div><div><div class="brand-name">LiteFile</div><div class="brand-sub">Your study shelf</div></div></div>
+  <div class="side-label">Library</div>
+  <nav class="nav-list" id="folderNav"></nav>
+  <div class="side-bottom"><div class="tip"><b>Keep it simple</b><p>Your collection lives in one small code file. No database, account, or admin panel needed.</p><button id="tipHelp" type="button">How to add documents ↗</button></div><div class="side-foot">Made for focused study · LiteFile</div></div>
+</aside>
+<main class="main">
+  <header class="topbar">
+    <div class="mobile-brand"><span class="brand-mark">L</span> LiteFile</div>
+    <div class="top-caption">A quieter place for your study material</div>
+    <label class="search-wrap"><span>⌕</span><input class="search" id="searchInput" type="search" placeholder="Search documents or folders..." aria-label="Search documents" autocomplete="off"></label>
+    <button class="help-btn" id="topHelp" type="button" aria-label="How to add documents">?</button>
+  </header>
+  <section class="content" id="libraryView">
+    <div class="welcome"><div><div class="eyebrow">Your personal document library</div><h1>Study without the clutter.</h1><p>All your study documents, arranged in one calm, dark place. Pick a folder, find a document, and get back to learning.</p></div><div class="stats"><div class="stat"><strong id="docStat">0</strong><span>Documents</span></div><div class="stat"><strong id="folderStat">0</strong><span>Folders</span></div></div></div>
+    <div class="section-head"><div><h2 id="listTitle">All documents</h2><p id="listSubtitle">Your saved study material in one place</p></div><div class="result-count" id="resultCount">0 items</div></div>
+    <div class="grid" id="documentGrid" aria-live="polite"></div>
+    <div class="note"><span>ⓘ</span><div><strong>About the reader:</strong> The library is lightweight, but document pages are still served by Scribd. If Scribd's own page is slow or unavailable, use “Open on Scribd” in the reader.</div></div>
+  </section>
+  <section class="reader-content" id="readerView" hidden>
+    <div class="reader-top"><button class="back" id="backButton" type="button">← &nbsp; Library</button><div class="reader-actions"><button class="tool" id="previousButton" type="button">← Previous</button><button class="tool" id="nextButton" type="button">Next →</button><button class="tool" id="reloadButton" type="button">↻ Reload</button><button class="tool" id="fullscreenButton" type="button">⛶ Fullscreen</button></div></div>
+    <div class="reader-heading"><div><h1 id="readerTitle">Document</h1><p id="readerMeta">Folder</p></div><button class="tool" id="readerFavorite" type="button">☆ Save</button></div>
+    <div class="stage" id="readerStage"><div class="loading" id="readerLoading"><div class="spinner"></div><p>Opening the Scribd viewer…</p></div><div class="reader-host" id="readerHost"></div></div>
+    <div class="fallback"><p><strong>Document not appearing?</strong><br>Scribd may take time to load or block an embedded view. Open the original document directly instead.</p><a class="external" id="openOriginal" href="#" target="_blank" rel="noopener noreferrer">Open on Scribd ↗</a></div>
+    <div class="reader-note">Page navigation, zoom, download permissions, and other PDF controls are provided by Scribd inside the embedded viewer. LiteFile cannot change those controls.</div>
+  </section>
+</main>
+<div class="backdrop" id="helpBackdrop" hidden><section class="modal" role="dialog" aria-modal="true" aria-labelledby="helpTitle"><div class="modal-head"><h2 id="helpTitle">Add documents to LiteFile</h2><button class="close" id="closeHelp" type="button" aria-label="Close">×</button></div><p>You only need to edit <code>documents.js</code>. No database or dashboard is involved.</p><ol><li>Open <code>documents.js</code> in your GitHub repository.</li><li>Copy the sample below and paste it after the existing document object.</li><li>Change its title, folder, and <code>embedUrl</code>. From Scribd's iframe code, copy only the URL inside <code>src="..."</code>.</li><li>Give it a unique <code>id</code>, then commit the change.</li></ol><div class="sample" id="sampleCode">{
+  id: "chemistry-1st-paper",
+  title: "Chemistry 1st Paper",
+  folder: "Chemistry",
+  description: "Class notes and practice material.",
+  embedUrl: "https://www.scribd.com/embeds/DOCUMENT_ID/content",
+  sourceUrl: "https://www.scribd.com/document/DOCUMENT_ID",
+  author: "Basit Iqbal Bitto"
+}</div><p class="small">Documents with the same folder name automatically appear together. You can create as many folders as you need.</p><button class="copy" id="copySample" type="button">Copy sample entry</button></section></div>
+<script src="documents.js"></script>
+<script>
+(function(){
+"use strict";
+var docs=Array.isArray(window.LITEFILE_DOCS)?window.LITEFILE_DOCS:[];
+var folder="all",current=null,shown=[],favorites=[];
+try{favorites=JSON.parse(localStorage.getItem("litefile-favorites")||"[]");if(!Array.isArray(favorites))favorites=[];}catch(e){favorites=[];}
+var el=function(id){return document.getElementById(id);};
+function esc(v){return String(v==null?"":v).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function valid(){return docs.filter(function(d){return d&&d.id&&d.title&&d.embedUrl;});}
+function folders(){var a=[];valid().forEach(function(d){var f=String(d.folder||"Unsorted");if(a.indexOf(f)<0)a.push(f);});return a.sort(function(a,b){return a.localeCompare(b);});}
+function updateCounts(){el("docStat").textContent=valid().length;el("folderStat").textContent=folders().length;}
+function renderNav(){
+var html='<button class="nav-button '+(folder==="all"?"active":"")+'" data-folder="all" type="button"><span>▦</span><span>All documents</span><span class="nav-count">'+valid().length+'</span></button>';
+html+='<button class="nav-button '+(folder==="favorites"?"active":"")+'" data-folder="favorites" type="button"><span>☆</span><span>Favourites</span><span class="nav-count">'+favorites.length+'</span></button>';
+folders().forEach(function(f){var n=valid().filter(function(d){return String(d.folder||"Unsorted")===f;}).length;html+='<button class="nav-button '+(folder===f?"active":"")+'" data-folder="'+esc(f)+'" type="button"><span>▱</span><span>'+esc(f)+'</span><span class="nav-count">'+n+'</span></button>';});
+el("folderNav").innerHTML=html;
+}
+function filtered(){
+var q=el("searchInput").value.trim().toLowerCase();
+return valid().filter(function(d){var f=String(d.folder||"Unsorted");var ok=folder==="all"||(folder==="favorites"?favorites.indexOf(d.id)>=0:f===folder);var hay=[d.title,f,d.description,d.author,(d.tags||[]).join(" ")].join(" ").toLowerCase();return ok&&(!q||hay.indexOf(q)>=0);});
+}
+function toggleFav(id){var i=favorites.indexOf(id);if(i<0)favorites.push(id);else favorites.splice(i,1);try{localStorage.setItem("litefile-favorites",JSON.stringify(favorites));}catch(e){}render();if(current&&current.id===id)updateFavButton();}
+function card(d){
+var fav=favorites.indexOf(d.id)>=0;
+return '<article class="doc-card" data-open="'+esc(d.id)+'" tabindex="0" role="button" aria-label="Open '+esc(d.title)+'"><div class="card-top"><div class="file-icon" aria-hidden="true">▤</div><button class="fav '+(fav?"active":"")+'" data-fav="'+esc(d.id)+'" type="button" aria-label="'+(fav?"Remove favourite":"Add favourite")+'">'+(fav?"★":"☆")+'</button></div><h3 class="doc-title">'+esc(d.title)+'</h3><p class="doc-description">'+esc(d.description||"Open this document in the built-in reader.")+'</p><div class="card-meta"><span class="folder-chip">'+esc(d.folder||"Unsorted")+'</span><span class="open-label">Open document ↗</span></div></article>';
+}
+function render(){
+shown=filtered();renderNav();updateCounts();
+el("listTitle").textContent=folder==="all"?"All documents":folder==="favorites"?"Favourites":folder;
+el("listSubtitle").textContent=folder==="all"?"Your saved study material in one place":"Documents in this collection";
+el("resultCount").textContent=shown.length+(shown.length===1?" item":" items");
+el("documentGrid").innerHTML=shown.length?shown.map(card).join(""):'<div class="empty"><div style="font-size:26px;color:#788da8">⌕</div><h3>No documents found</h3><p>'+(el("searchInput").value.trim()?"Try another search term.":folder==="favorites"?"Tap a star on a document to save it here.":"Add documents in documents.js to fill this folder.")+'</p></div>';
+}
+function updateFavButton(){el("readerFavorite").textContent=current&&favorites.indexOf(current.id)>=0?"★ Saved":"☆ Save";}
+function updatePrevNext(){var i=shown.findIndex(function(d){return current&&d.id===current.id;});var p=el("previousButton"),n=el("nextButton");p.disabled=i<=0;n.disabled=i<0||i>=shown.length-1;p.style.opacity=i<=0?".45":"1";n.style.opacity=i<0||i>=shown.length-1?".45":"1";}
+function openDoc(id){
+var d=valid().find(function(x){return x.id===id;});if(!d)return;current=d;
+el("libraryView").hidden=true;el("readerView").hidden=false;el("readerTitle").textContent=d.title;el("readerMeta").textContent=(d.folder||"Unsorted")+(d.author?" · "+d.author:"");el("openOriginal").href=d.sourceUrl||"https://www.scribd.com/";el("readerLoading").hidden=false;el("readerHost").innerHTML="";
+var iframe=document.createElement("iframe");iframe.title=d.title+" Scribd document viewer";iframe.src=d.embedUrl;iframe.loading="eager";iframe.referrerPolicy="strict-origin-when-cross-origin";iframe.allowFullscreen=true;iframe.setAttribute("allow","fullscreen");iframe.addEventListener("load",function(){el("readerLoading").hidden=true;});el("readerHost").appendChild(iframe);
+updateFavButton();updatePrevNext();window.scrollTo(0,0);
+}
+function backToLibrary(){current=null;el("readerHost").innerHTML="";el("readerView").hidden=true;el("libraryView").hidden=false;render();window.scrollTo(0,0);}
+function help(){el("helpBackdrop").hidden=false;el("closeHelp").focus();}
+function closeHelp(){el("helpBackdrop").hidden=true;}
+el("folderNav").addEventListener("click",function(e){var b=e.target.closest("[data-folder]");if(b){folder=b.getAttribute("data-folder");render();}});
+el("documentGrid").addEventListener("click",function(e){var f=e.target.closest("[data-fav]");if(f){e.stopPropagation();toggleFav(f.getAttribute("data-fav"));return;}var c=e.target.closest("[data-open]");if(c)openDoc(c.getAttribute("data-open"));});
+el("documentGrid").addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" ")&&e.target.matches("[data-open]")){e.preventDefault();openDoc(e.target.getAttribute("data-open"));}});
+el("searchInput").addEventListener("input",render);
+el("backButton").addEventListener("click",backToLibrary);
+el("previousButton").addEventListener("click",function(){var i=shown.findIndex(function(d){return current&&d.id===current.id;});if(i>0)openDoc(shown[i-1].id);});
+el("nextButton").addEventListener("click",function(){var i=shown.findIndex(function(d){return current&&d.id===current.id;});if(i>=0&&i<shown.length-1)openDoc(shown[i+1].id);});
+el("reloadButton").addEventListener("click",function(){if(current)openDoc(current.id);});
+el("fullscreenButton").addEventListener("click",function(){var s=el("readerStage");if(document.fullscreenElement)document.exitFullscreen();else if(s.requestFullscreen)s.requestFullscreen();});
+el("readerFavorite").addEventListener("click",function(){if(current)toggleFav(current.id);});
+el("topHelp").addEventListener("click",help);el("tipHelp").addEventListener("click",help);el("closeHelp").addEventListener("click",closeHelp);
+el("helpBackdrop").addEventListener("click",function(e){if(e.target===el("helpBackdrop"))closeHelp();});
+el("copySample").addEventListener("click",function(){var text=el("sampleCode").textContent;if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){el("copySample").textContent="Copied!";}).catch(function(){el("copySample").textContent="Select and copy the sample";});}else{el("copySample").textContent="Select and copy the sample";}});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!el("helpBackdrop").hidden)closeHelp();if(e.key==="Escape"&&document.fullscreenElement)document.exitFullscreen();});
+render();
+}());
+</script>
+</body>
+</html>
