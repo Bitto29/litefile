@@ -66,5 +66,21 @@ window.LITEFILE_DOCS = [
     description: "Chemistry second paper",
     embedUrl: "https://www.scribd.com/embeds/1092440955/content?start_page=1&view_mode=scroll&access_key=key-vVUL6PuTCXW81EuDs4mO",
     sourceUrl: "https://www.scribd.com/document/1092440955/pre-QPS-chm2-pdf"
+  },
+  {
+    id: "hsc-supplement-chemistry-2nd-2027",
+    title: "HSC Chemistry 2nd Paper Supplement 2027.pdf",
+    folder: "HSC Supplement 2027",
+    description: "Chemistry second paper supplement",
+    embedUrl: "https://www.scribd.com/embeds/1095070268/content?start_page=1&view_mode=scroll&access_key=key-xoRn17UgDqElu242OjeD",
+    sourceUrl: "https://www.scribd.com/document/1095070268/Hsc-Chemistry-2nd-Paper-Supplement-2027#from_embed"
+  },
+  {
+    id: "hsc-supplement-physics-2nd-2027",
+    title: "HSC Physics 2nd Paper Supplement 2027.pdf",
+    folder: "HSC Supplement 2027",
+    description: "Physics second paper supplement",
+    embedUrl: "https://www.scribd.com/embeds/1095069715/content?start_page=1&view_mode=scroll&access_key=key-xKhieJXlNEpBwgWbQJ04",
+    sourceUrl: "https://www.scribd.com/document/1095069715/Hsc-Physics-2nd-Paper-Supplement-2027#from_embed"
   }
 ];
