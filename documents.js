@@ -82,5 +82,13 @@ window.LITEFILE_DOCS = [
     description: "Physics second paper supplement",
     embedUrl: "https://www.scribd.com/embeds/1095069715/content?start_page=1&view_mode=scroll&access_key=key-xKhieJXlNEpBwgWbQJ04",
     sourceUrl: "https://www.scribd.com/document/1095069715/Hsc-Physics-2nd-Paper-Supplement-2027#from_embed"
+  },
+  {
+    id: "hsc-supplement-higher-math-1st-2027",
+    title: "Higher Math 1st Supplement 2027.pdf",
+    folder: "HSC Supplement 2027",
+    description: "Higher Mathematics first paper supplement",
+    embedUrl: "https://www.scribd.com/embeds/1095277444/content?start_page=1&view_mode=scroll&access_key=key-6D28sat7kb8ZS5cSCscP",
+    sourceUrl: "https://www.scribd.com/document/1095277444/Higher-Math-1st-Suppliment-2027#from_embed"
   }
 ];
