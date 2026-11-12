@@ -57,7 +57,7 @@ return '<div class="row"><div class="folder-icon"><svg viewBox="0 0 24 24"><path
 var standalone=docs.filter(function(d){return !d.folder});
 if(standalone.length){
   var rows=standalone.map(function(d){
-    return '<div class="row"><div class="file-icon"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6zM14 3v5h5M9 12h6M9 16h6"/></svg></div><a class="open item-main" href="reader.html?id='+encodeURIComponent(d.id)+'"><div class="item-title">'+esc(d.title)+'</div><div class="item-sub">'+esc(d.description||"Open document")+'</div></a><button class="share" data-share="'+esc(d.id)+'" aria-label="Share '+esc(d.title)+'" title="Share"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.7 6.6-4.4M8.7 13.3l6.6 4.4"/></svg></button></div>';
+    return '<div class="row"><div class="file-icon"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6zM14 3v5h5M9 12h6M9 16h6"/></svg></div><a class="open item-main" href="reader.html?id='+encodeURIComponent(d.id)+'"><div class="item-title">'+esc(d.title)+'</div></a></div>';
   }).join("");
   $("items").innerHTML += '<div class="standalone-list">'+rows+'</div>';
 }
