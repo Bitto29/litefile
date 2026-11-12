@@ -49,16 +49,23 @@ if(navigator.share){navigator.share(data).catch(function(e){if(e.name!=="AbortEr
 function copy(url){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(function(){alert("Share link copied")}).catch(function(){prompt("Copy link:",url)})}else prompt("Copy link:",url)}
 function folders(){
 $("folderBack").hidden=true;$("heading").textContent="Folders";$("description").textContent="Choose a folder to see its documents.";
-var names=Array.from(new Set(docs.map(function(d){return d.folder||"Unsorted"}))).sort();
+var names=Array.from(new Set(docs.filter(function(d){return !!d.folder}).map(function(d){return d.folder}))).sort();
 $("items").innerHTML=names.length?names.map(function(name){
 var count=docs.filter(function(d){return(d.folder||"Unsorted")===name}).length;
 return '<div class="row"><div class="folder-icon"><svg viewBox="0 0 24 24"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5H10l2 2h7.5A1.5 1.5 0 0 1 21 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5z"/></svg></div><button class="open item-main" data-folder="'+esc(name)+'"><div class="item-title">'+esc(name)+'</div><div class="item-sub">'+count+' '+(count===1?"document":"documents")+'</div></button></div>'
 }).join(""):'<div class="empty">No folders yet. Add documents in documents.js.</div>';
+var standalone=docs.filter(function(d){return !d.folder});
+if(standalone.length){
+  var rows=standalone.map(function(d){
+    return '<div class="row"><div class="file-icon"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6zM14 3v5h5M9 12h6M9 16h6"/></svg></div><a class="open item-main" href="reader.html?id='+encodeURIComponent(d.id)+'"><div class="item-title">'+esc(d.title)+'</div><div class="item-sub">'+esc(d.description||"Open document")+'</div></a><button class="share" data-share="'+esc(d.id)+'" aria-label="Share '+esc(d.title)+'" title="Share"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.7 6.6-4.4M8.7 13.3l6.6 4.4"/></svg></button></div>';
+  }).join("");
+  $("items").innerHTML += '<div class="standalone-list">'+rows+'</div>';
+}
 }
 function folder(name){
 $("folderBack").hidden=false;$("heading").textContent=name;$("description").textContent="Documents in this folder.";
 $("folderBack").href="index.html";
-var entries=docs.filter(function(d){return(d.folder||"Unsorted")===name});
+var entries=docs.filter(function(d){return d.folder===name});
 $("items").innerHTML=entries.length?entries.map(function(d){
 return '<div class="row"><div class="file-icon"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6zM14 3v5h5M9 12h6M9 16h6"/></svg></div><a class="open item-main" href="reader.html?id='+encodeURIComponent(d.id)+'"><div class="item-title">'+esc(d.title)+'</div><div class="item-sub">'+esc(d.description||"Open document")+'</div></a><button class="share" data-share="'+esc(d.id)+'" aria-label="Share '+esc(d.title)+'" title="Share"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.7 6.6-4.4M8.7 13.3l6.6 4.4"/></svg></button></div>'
 }).join(""):'<div class="empty">No documents in this folder yet.</div>';
@@ -70,7 +77,7 @@ if(s){var d=docs.find(function(x){return x.id===s.getAttribute("data-share")});i
 });
 $("folderBack").addEventListener("click",function(e){e.preventDefault();history.replaceState(null,"",location.pathname+location.search);folders()});
 var m=location.hash.match(/^#folder=(.*)$/);
-if(m){var name=decodeURIComponent(m[1]);if(docs.some(function(d){return(d.folder||"Unsorted")===name}))folder(name);else folders()}else folders();
+if(m){var name=decodeURIComponent(m[1]);if(docs.some(function(d){return d.folder===name}))folder(name);else folders()}else folders();
 }());
 </script>
 </body>
