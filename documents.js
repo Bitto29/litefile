@@ -90,5 +90,19 @@ window.LITEFILE_DOCS = [
     description: "Higher Mathematics first paper supplement",
     embedUrl: "https://www.scribd.com/embeds/1095277444/content?start_page=1&view_mode=scroll&access_key=key-6D28sat7kb8ZS5cSCscP",
     sourceUrl: "https://www.scribd.com/document/1095277444/Higher-Math-1st-Suppliment-2027#from_embed"
+  },
+  {
+    id: "karmamukhi-rosayon-notes-dark",
+    title: "Karmamukhi_Rosayon_Notes_Dark.pdf",
+    description: "কর্মমুখী রসায়ন নোট",
+    embedUrl: "https://www.scribd.com/embeds/1096049637/content?start_page=1&view_mode=scroll&access_key=key-LlVuolYgJ9JZzit9BSUn",
+    sourceUrl: "https://www.scribd.com/document/1096049637/Karmamukhi-Rosayon-Notes-Dark-pdf#from_embed"
+  },
+  {
+    id: "kormomukhi-rosayon-master-note",
+    title: "কর্মমুখী রসায়ন - মাস্টার নোট.pdf",
+    description: "Master note",
+    embedUrl: "https://www.scribd.com/embeds/1096046691/content?start_page=1&view_mode=scroll&access_key=key-VZNfkPaJHQLJo9SiU3uz",
+    sourceUrl: "https://www.scribd.com/document/1096046691/%E0%A6%95%E0%A6%B0-%E0%A6%AE%E0%A6%AE%E0%A7%81%E0%A6%96%E0%A7%80-%E0%A6%B0%E0%A6%B8%E0%A6%BE%E0%A7%9F%E0%A6%A8-%E0%A6%AE%E0%A6%BE%E0%A6%B8-%E0%A6%9F%E0%A6%BE%E0%A6%B0-%E0%A6%A8%E0%A7%8B%E0%A6%9F-pdf#from_embed"
   }
 ];
