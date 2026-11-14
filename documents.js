@@ -104,5 +104,13 @@ window.LITEFILE_DOCS = [
     description: "Master note",
     embedUrl: "https://www.scribd.com/embeds/1096046691/content?start_page=1&view_mode=scroll&access_key=key-VZNfkPaJHQLJo9SiU3uz",
     sourceUrl: "https://www.scribd.com/document/1096046691/%E0%A6%95%E0%A6%B0-%E0%A6%AE%E0%A6%AE%E0%A7%81%E0%A6%96%E0%A7%80-%E0%A6%B0%E0%A6%B8%E0%A6%BE%E0%A7%9F%E0%A6%A8-%E0%A6%AE%E0%A6%BE%E0%A6%B8-%E0%A6%9F%E0%A6%BE%E0%A6%B0-%E0%A6%A8%E0%A7%8B%E0%A6%9F-pdf#from_embed"
+  },
+  {
+    id: "hsc-ict-supplement-2026",
+    title: "HSC ICT Supplement 2026.pdf",
+    folder: "HSC Supplement 2026",
+    description: "ICT supplement 2026",
+    embedUrl: "https://www.scribd.com/embeds/974838840/content?start_page=1&view_mode=scroll&access_key=key-ZwgeRcCosNsSmuq2B1M8",
+    sourceUrl: "https://www.scribd.com/document/974838840/Hsc-Ict-Supplement-2026#from_embed"
   }
 ];
