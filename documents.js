@@ -112,5 +112,13 @@ window.LITEFILE_DOCS = [
     description: "ICT supplement 2026",
     embedUrl: "https://www.scribd.com/embeds/974838840/content?start_page=1&view_mode=scroll&access_key=key-ZwgeRcCosNsSmuq2B1M8",
     sourceUrl: "https://www.scribd.com/document/974838840/Hsc-Ict-Supplement-2026#from_embed"
+  },
+  {
+    id: "hsc-bangla-1st-supplement-2026",
+    title: "HSC Bangla 1st Paper Supplement 2026.pdf",
+    folder: "HSC Supplement 2026",
+    description: "Bangla first paper supplement 2026",
+    embedUrl: "https://www.scribd.com/embeds/974679187/content?start_page=1&view_mode=scroll&access_key=key-Jcto5mNxn6NenibjjnG6",
+    sourceUrl: "https://www.scribd.com/document/974679187/Hsc-Bangla-1st-Paper-Suppliment-2026#from_embed"
   }
 ];
