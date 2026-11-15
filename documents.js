@@ -120,5 +120,13 @@ window.LITEFILE_DOCS = [
     description: "Bangla first paper supplement 2026",
     embedUrl: "https://www.scribd.com/embeds/974679187/content?start_page=1&view_mode=scroll&access_key=key-Jcto5mNxn6NenibjjnG6",
     sourceUrl: "https://www.scribd.com/document/974679187/Hsc-Bangla-1st-Paper-Suppliment-2026#from_embed"
+  },
+  {
+    id: "hsc-bangla-2nd-supplement-2027",
+    title: "Bangla 2nd Paper Supplement 2027.pdf",
+    folder: "HSC Supplement 2027",
+    description: "Bangla second paper supplement 2027",
+    embedUrl: "https://www.scribd.com/embeds/1097137355/content?start_page=1&view_mode=scroll&access_key=key-v7vyJ9LoEfHZBPCXdv8q",
+    sourceUrl: "https://www.scribd.com/document/1097137355/Bangla-2nd-paper-supplement-2027-pdf#from_embed"
   }
 ];
