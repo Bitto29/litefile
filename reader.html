@@ -22,12 +22,16 @@
 .pagebar button{height:32px;padding:0 12px;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--text);font:inherit;font-size:12px}
 iframe{display:block;width:100%;height:calc(100dvh - 103px);min-height:240px;border:0;background:#fff}
 iframe:fullscreen{width:100vw;height:100vh;min-height:100vh}
-body.theater-mode{padding:0;max-width:none;margin:0}
+#viewer-stage{width:100%;height:calc(100dvh - 103px);min-height:240px;display:flex;align-items:stretch;justify-content:center;background:var(--bg)}
+#viewer-stage iframe{height:100%;min-height:0}
+body.theater-mode{padding:0;max-width:none;margin:0;background:var(--bg)}
 body.theater-mode .top,body.theater-mode .pagebar{display:none}
-body.theater-mode iframe{width:100%;height:100dvh;min-height:100dvh}
+body.theater-mode #viewer-stage{width:100vw;height:100dvh;min-height:100dvh;align-items:center;justify-content:center;background:#101820;overflow:hidden}
+body.theater-mode #viewer{width:min(100vw,calc(100dvh * var(--page-ratio, .707)));height:100dvh;min-height:100dvh;flex:0 0 auto;background:#fff}
+body.theater-mode #theater{position:fixed;z-index:20;right:14px;bottom:14px;width:42px;height:42px;opacity:.18;background:rgba(16,24,32,.82);border-color:rgba(255,255,255,.18);backdrop-filter:blur(8px)}
 body.theater-mode #theater{position:fixed;z-index:20;right:14px;bottom:14px;width:42px;height:42px;opacity:.22;background:rgba(16,24,32,.82);border-color:rgba(255,255,255,.18);backdrop-filter:blur(8px)}
 body.theater-mode #theater:hover,body.theater-mode #theater:focus-visible{opacity:1}
-@media(min-width:700px){body{max-width:1100px;margin:0 auto}.top{margin-bottom:10px}iframe{height:calc(100dvh - 108px)}}
+@media(min-width:700px){body{max-width:1100px;margin:0 auto}.top{margin-bottom:10px}iframe{height:calc(100dvh - 108px)}#viewer-stage{height:calc(100dvh - 108px)}}
 </style>
 </head>
 <body>
@@ -39,7 +43,7 @@ body.theater-mode #theater:hover,body.theater-mode #theater:focus-visible{opacit
 <button class="icon-btn" id="fullscreen" aria-label="Full screen" title="Full screen"><svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m13-5h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></button>
 </div>
 <div class="pagebar"><label for="page">Page</label><input id="page" type="number" min="1" step="1" inputmode="numeric" value="1"><button id="go">Go</button></div>
-<iframe id="viewer" title="Document" allowfullscreen></iframe>
+<div id="viewer-stage"><iframe id="viewer" title="Document" allowfullscreen></iframe></div>
 <script src="documents.js"></script>
 <script>
 (function(){
@@ -53,6 +57,9 @@ var $=function(id){return document.getElementById(id)};
 if(!doc){$("title").textContent="Document not found";$("viewer").hidden=true;$("page").disabled=true;$("go").disabled=true;return}
 document.title=doc.title+" · LiteFile";
 $("title").textContent=doc.title;
+var ratio=Number(doc.aspectRatio)||0.707;
+if(!Number.isFinite(ratio)||ratio<0.35||ratio>2.5)ratio=0.707;
+document.documentElement.style.setProperty("--page-ratio",String(ratio));
 function loadPage(value){
 var n=Math.floor(Number(value));
 if(!Number.isFinite(n)||n<1){alert("Enter a valid page number.");return}
