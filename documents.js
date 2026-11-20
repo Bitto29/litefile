@@ -4,6 +4,55 @@
 */
 window.LITEFILE_DOCS = [
   {
+    id: "meditricks-physics-1st-2025-26",
+    title: "উন্মেষ মেডিট্রিক্স পদার্থ বিজ্ঞান ১ম পত্র ২০২৫-২৬.pdf",
+    folder: "Meditricks",
+    description: "পদার্থবিজ্ঞান ১ম পত্র",
+    embedUrl: "https://www.scribd.com/embeds/1098890324/content?start_page=1&view_mode=scroll&access_key=key-2JQupcJIyYPbhPlk8KLl",
+    sourceUrl: "https://www.scribd.com/document/1098890324/"
+  },
+  {
+    id: "meditricks-physics-2nd-2025-26",
+    title: "উন্মেষ মেডিট্রিক্স পদার্থবিজ্ঞান ২য় পত্র ২০২৫-২৬.pdf",
+    folder: "Meditricks",
+    description: "পদার্থবিজ্ঞান ২য় পত্র",
+    embedUrl: "https://www.scribd.com/embeds/1098890711/content?start_page=1&view_mode=scroll&access_key=key-yOrmNSsJkedCutrSQf2N",
+    sourceUrl: "https://www.scribd.com/document/1098890711/"
+  },
+  {
+    id: "meditricks-chemistry-1st-2025-26",
+    title: "উন্মেষ মেডিট্রিক্স রসায়ন ১ম পত্র ২০২৫-২৬.pdf",
+    folder: "Meditricks",
+    description: "রসায়ন ১ম পত্র",
+    embedUrl: "https://www.scribd.com/embeds/1098920815/content?start_page=1&view_mode=scroll&access_key=key-Nx5q7JO2EpFayBiH6tf5",
+    sourceUrl: "https://www.scribd.com/document/1098920815/"
+  },
+  {
+    id: "meditricks-chemistry-2nd-2025-26",
+    title: "উন্মেষ মেডিট্রিক্স রসায়ন ২য় পত্র ২০২৫-২৬.pdf",
+    folder: "Meditricks",
+    description: "রসায়ন ২য় পত্র",
+    embedUrl: "https://www.scribd.com/embeds/1098921086/content?start_page=1&view_mode=scroll&access_key=key-mHfb5wXf45Ppxae7ZO3m",
+    sourceUrl: "https://www.scribd.com/document/1098921086/"
+  },
+  {
+    id: "meditricks-botany-2025-26",
+    title: "উন্মেষ মেডিট্রিক্স উদ্ভিদবিজ্ঞান ২০২৫-২৬.pdf",
+    folder: "Meditricks",
+    description: "উদ্ভিদবিজ্ঞান",
+    embedUrl: "https://www.scribd.com/embeds/1098896304/content?start_page=1&view_mode=scroll&access_key=key-gWAMMOYto1KqlB5kiQfo",
+    sourceUrl: "https://www.scribd.com/document/1098896304/"
+  },
+  {
+    id: "meditricks-zoology-2025-26",
+    title: "উন্মেষ মেডিট্রিক্স প্রানীবিজ্ঞান ২০২৫-২৬.pdf",
+    folder: "Meditricks",
+    description: "প্রাণীবিজ্ঞান",
+    embedUrl: "https://www.scribd.com/embeds/1098896190/content?start_page=1&view_mode=scroll&access_key=key-rej5hh40BMiZN6nYECTx",
+    sourceUrl: "https://www.scribd.com/document/1098896190/"
+  },
+
+  {
     id: "qps-physics-1st",
     title: "QPS Physics 1st.pdf",
     folder: "QPS",
