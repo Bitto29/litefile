@@ -58,7 +58,7 @@ body.clipping #pinned-clip{display:none!important}
 .clip-card-btn{width:27px;height:27px;display:grid;place-items:center;padding:0;border:1px solid #40515a;border-radius:7px;background:#18252e;color:#dce7e8;font-size:17px;line-height:1;cursor:pointer}
 .clip-card-btn:hover{border-color:var(--accent);color:var(--accent)}
 #clip-card-body{height:calc(100% - 39px);min-height:0;padding:6px;background:#0c1217;overflow:hidden;display:flex;align-items:center;justify-content:center;overscroll-behavior:contain;position:relative;cursor:grab;touch-action:none}
-#pinned-image{display:block;width:100%;height:100%;max-width:none;max-height:none;object-fit:contain;flex:0 0 auto;transform-origin:center center;border-radius:4px;background:#0c1217;user-select:none;-webkit-user-drag:none;pointer-events:none}
+#pinned-image{display:block;width:100%;height:100%;max-width:none;max-height:none;object-fit:contain;flex:0 0 auto;transform-origin:center center;border-radius:4px;background:#0c1217;user-select:none;-webkit-user-drag:none;pointer-events:auto;cursor:grab}
 #pinned-clip.maximized{left:8px!important;top:8px!important;width:calc(100vw - 16px)!important;height:calc(100vh - 16px)!important;max-width:none;max-height:none;resize:none;}
 #pinned-clip.minimized #clip-card-body{display:none}
 #pinned-clip.minimized{width:min(240px,calc(100vw - 24px));max-height:none}
