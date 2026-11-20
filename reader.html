@@ -85,14 +85,14 @@ body.clipping #pinned-clip{display:none!important}
 @media(min-width:700px){body{max-width:1100px;margin:0 auto}.top{margin-bottom:10px}iframe{height:calc(100dvh - 108px)}#viewer-stage{height:calc(100dvh - 108px)}}
 @media(max-width:420px){
 body{padding:7px 7px 0}
-.top{height:36px;gap:4px;margin-bottom:7px;display:flex;align-items:center;flex-wrap:nowrap}
-.icon-btn{width:30px;height:30px;flex:0 0 30px;border-radius:7px}
-.icon-btn svg{width:17px;height:17px}
+.top{height:36px;gap:3px;margin-bottom:7px;display:flex;align-items:center;flex-wrap:nowrap}
+.icon-btn{width:28px;height:30px;flex:0 0 28px;border-radius:7px}
+.icon-btn svg{width:16px;height:16px}
 .title{min-width:0;flex:1;font-size:12px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;overflow-wrap:normal}
-.pagebar{display:contents}
+.pagebar{height:30px;display:flex;align-items:center;justify-content:center;gap:3px;flex:0 0 70px;margin:0}
 .pagebar label{display:none}
-.pagebar input{width:43px;height:30px;flex:0 0 43px;padding:3px 4px;font-size:12px;border-radius:7px}
-.pagebar button{height:30px;flex:0 0 31px;padding:0 5px;font-size:11px;border-radius:7px}
+.pagebar input{width:38px;height:30px;flex:0 0 38px;padding:3px 3px;font-size:12px;border-radius:7px}
+.pagebar button{height:30px;flex:0 0 29px;padding:0 3px;font-size:11px;border-radius:7px}
 #viewer-stage{height:calc(100dvh - 69px);min-height:220px}
 iframe{height:calc(100dvh - 69px);min-height:220px}
 #pinned-clip{left:8px;top:86px;width:min(270px,calc(100vw - 16px))}
@@ -103,12 +103,12 @@ iframe{height:calc(100dvh - 69px);min-height:220px}
 <div class="top">
 <button class="icon-btn" id="back" aria-label="Back" title="Back"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
 <div class="title" id="title">Loading document…</div>
+<div class="pagebar"><label for="page">Page</label><input id="page" type="number" min="1" step="1" inputmode="numeric" value="1"><button id="go">Go</button></div>
 <button class="icon-btn" id="share" aria-label="Share document" title="Share"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.7 6.6-4.4M8.7 13.3l6.6 4.4"/></svg></button>
 <button class="icon-btn" id="theater" aria-label="Theater mode" title="Theater mode"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 9h18M7 5v4m10-4v4"/></svg></button>
 <button class="icon-btn" id="pin-clip" aria-label="Pin a PDF clip" title="Desktop: capture this tab. Phone: choose a screenshot to crop"><svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m8 0h3a2 2 0 0 0 2-2v-3M8 8h8v8H8z"/></svg></button>
 <button class="icon-btn" id="fullscreen" aria-label="Full screen" title="Full screen"><svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m13-5h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></button>
 </div>
-<div class="pagebar"><label for="page">Page</label><input id="page" type="number" min="1" step="1" inputmode="numeric" value="1"><button id="go">Go</button></div>
 <div id="viewer-stage"><iframe id="viewer" title="Document" allowfullscreen></iframe></div>
 <div id="clip-overlay" aria-label="Drag to capture a PDF area"><div id="clip-selection"></div></div>
 <div id="clip-help">Drag over the question or answer to pin it · Press Esc to cancel</div>
