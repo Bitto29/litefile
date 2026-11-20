@@ -278,7 +278,7 @@ $("clip-overlay").addEventListener("pointerup",function(e){
 });
 $("clip-overlay").addEventListener("pointercancel",cancelClipSelection);
 
-/* Gallery screenshot fallback used by Android browsers without getDisplayMedia(). */
+/* Gallery screenshot input for the Scribd cross-origin viewer. */
 var photoSelection=null,photoObjectUrl=null;
 function resetPhotoCropper(){
  $("photo-cropper").classList.remove("active");$("photo-crop-selection").style.display="none";photoSelection=null;$("pin-photo-crop").disabled=true;
