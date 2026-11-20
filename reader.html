@@ -78,7 +78,7 @@ body.clipping #pinned-clip{display:none!important}
 <div class="title" id="title">Loading document…</div>
 <button class="icon-btn" id="share" aria-label="Share document" title="Share"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.7 6.6-4.4M8.7 13.3l6.6 4.4"/></svg></button>
 <button class="icon-btn" id="theater" aria-label="Theater mode" title="Theater mode"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 9h18M7 5v4m10-4v4"/></svg></button>
-<button class="icon-btn" id="pin-clip" aria-label="Pin a PDF clip" title="Capture a PDF area and pin it"><svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m8 0h3a2 2 0 0 0 2-2v-3M8 8h8v8H8z"/></svg></button>
+<button class="icon-btn" id="pin-clip" aria-label="Pin a PDF clip" title="Desktop: capture this tab. Phone: choose a screenshot to crop"><svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m8 0h3a2 2 0 0 0 2-2v-3M8 8h8v8H8z"/></svg></button>
 <button class="icon-btn" id="fullscreen" aria-label="Full screen" title="Full screen"><svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m13-5h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></button>
 </div>
 <div class="pagebar"><label for="page">Page</label><input id="page" type="number" min="1" step="1" inputmode="numeric" value="1"><button id="go">Go</button></div>
@@ -160,7 +160,7 @@ async function startClipSelection(){
  if(!navigator.mediaDevices||!navigator.mediaDevices.getDisplayMedia){openScreenshotPicker();return;}
  if(!window.isSecureContext){alert("Pin Clip needs a secure HTTPS page.");return;}
  try{
-  var stream=await navigator.mediaDevices.getDisplayMedia({video:{frameRate:15},audio:false});
+  var stream=await navigator.mediaDevices.getDisplayMedia({video:{displaySurface:"browser",frameRate:15},audio:false});
   captureStream=stream;
   captureVideo=document.createElement("video");captureVideo.muted=true;captureVideo.playsInline=true;captureVideo.srcObject=stream;
   await captureVideo.play();
