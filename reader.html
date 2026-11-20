@@ -247,7 +247,7 @@ function showPinnedClip(data){
  var label=(data.title||"PDF reference")+(data.page?" · p. "+data.page:"");
  $("clip-card-title").textContent=label;
  $("pinned-clip").classList.remove("minimized");
- $("clip-minimize").textContent="−";$("clip-minimize").title="Minimize";$("clip-minimize").setAttribute("aria-label","Minimize clip");
+ $("clip-minimize").innerHTML='<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';$("clip-minimize").title="Minimize";$("clip-minimize").setAttribute("aria-label","Minimize clip");
  $("pinned-clip").style.display="block";
  var card=$("pinned-clip");
  var left=Number.isFinite(Number(data.left))?Number(data.left):14;
@@ -374,21 +374,32 @@ $("clip-resize-handle").addEventListener("pointerdown",function(e){var card=$("p
 $("clip-resize-handle").addEventListener("pointermove",function(e){if(!resizeCard||e.pointerId!==resizeCard.id)return;var card=$("pinned-clip");var w=Math.max(220,Math.min(window.innerWidth-card.offsetLeft-4,resizeCard.w+e.clientX-resizeCard.x));var h=Math.max(150,Math.min(window.innerHeight-card.offsetTop-4,resizeCard.h+e.clientY-resizeCard.y));if(resizeFrame)cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(function(){card.style.width=w+"px";card.style.height=h+"px";resizeFrame=0;});});
 function finishCardResize(e){if(resizeCard&&e.pointerId===resizeCard.id){resizeCard=null;if(resizeFrame){cancelAnimationFrame(resizeFrame);resizeFrame=0;}var card=$("pinned-clip");if(clipData){clipData.width=card.offsetWidth;clipData.height=card.offsetHeight;savePinnedClip(clipData);}}}
 $("clip-resize-handle").addEventListener("pointerup",finishCardResize);$("clip-resize-handle").addEventListener("pointercancel",finishCardResize);
-var preMinimizeHeight=null;
-$("clip-minimize").addEventListener("click",function(){
- var card=$("pinned-clip"),mini=!card.classList.contains("minimized");
+var preMinimizeBounds=null;
+function setClipMinimized(mini){
+ var card=$("pinned-clip"),button=$("clip-minimize");
  if(mini){
-  preMinimizeHeight=card.getBoundingClientRect().height;
+  if(!card.classList.contains("minimized")){
+   var r=card.getBoundingClientRect();
+   preMinimizeBounds={width:r.width,height:r.height,minWidth:card.style.minWidth,minHeight:card.style.minHeight};
+  }
   card.classList.add("minimized");
-  card.style.height="40px";
-  card.style.minHeight="40px";
+  card.style.minHeight="39px";
+  card.style.height="39px";
+  button.innerHTML='<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 5v14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+  button.title="Restore";button.setAttribute("aria-label","Restore clip");
  }else{
   card.classList.remove("minimized");
   card.style.minHeight="150px";
-  card.style.height=(preMinimizeHeight&&preMinimizeHeight>40?preMinimizeHeight:360)+"px";
-  preMinimizeHeight=null;
+  card.style.height=(preMinimizeBounds&&preMinimizeBounds.height>40?preMinimizeBounds.height:360)+"px";
+  if(preMinimizeBounds&&preMinimizeBounds.width)card.style.width=preMinimizeBounds.width+"px";
+  preMinimizeBounds=null;
+  button.innerHTML='<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+  button.title="Minimize";button.setAttribute("aria-label","Minimize clip");
  }
- this.textContent=mini?"+":"−";this.title=mini?"Expand":"Minimize";this.setAttribute("aria-label",mini?"Expand clip":"Minimize clip");
+}
+$("clip-minimize").addEventListener("click",function(e){
+ e.preventDefault();e.stopPropagation();
+ setClipMinimized(!$("pinned-clip").classList.contains("minimized"));
 });
 function applyClipZoom(){var img=$("pinned-image");img.style.transform="translate("+clipPanX+"px, "+clipPanY+"px) scale("+clipZoom+")";}
 $("clip-zoom-in").addEventListener("click",function(){clipZoom=Math.min(4,clipZoom+0.2);applyClipZoom();});
