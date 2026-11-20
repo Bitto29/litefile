@@ -44,14 +44,14 @@ body.clipping #clip-help{display:block}
 body.clipping #pinned-clip{display:none!important}
 
 /* The pinned reference card */
-#pinned-clip{resize:both;min-width:220px;min-height:120px;width:min(360px,calc(100vw - 24px));height:min(360px,58vh);max-width:calc(100vw - 8px);max-height:82vh;overflow:hidden}
+#pinned-clip{resize:none;min-width:220px;min-height:150px;width:min(360px,calc(100vw - 24px));height:min(360px,58vh);max-width:calc(100vw - 8px);max-height:82vh;overflow:hidden}
 .clip-card-actions{gap:4px}
 #clip-card-body{height:calc(100% - 39px);overflow:auto;display:flex;align-items:center;justify-content:center}
 #pinned-image{width:100%;height:auto;max-height:none;object-fit:contain;transform-origin:center center}
 #pinned-clip.minimized{height:auto;resize:none}
 #pinned-clip.minimized #clip-card-body{display:none}
 
-#pinned-clip{display:none;position:fixed;z-index:1002;left:14px;top:112px;width:min(420px,calc(100vw - 24px));height:min(420px,68vh);min-width:220px;min-height:150px;max-width:calc(100vw - 8px);max-height:calc(100vh - 16px);resize:both;overflow:hidden;border:1px solid #40525c;border-radius:11px;background:#17232c;box-shadow:0 12px 36px rgba(0,0,0,.48);}
+#pinned-clip{display:none;position:fixed;z-index:1002;left:14px;top:112px;width:min(420px,calc(100vw - 24px));height:min(420px,68vh);min-width:220px;min-height:150px;max-width:calc(100vw - 8px);max-height:calc(100vh - 16px);resize:none;overflow:hidden;border:1px solid #40525c;border-radius:11px;background:#17232c;box-shadow:0 12px 36px rgba(0,0,0,.48);}
 .clip-card-bar{min-height:39px;display:flex;align-items:center;gap:8px;padding:6px 8px 6px 11px;background:#22313b;border-bottom:1px solid var(--line);cursor:move;touch-action:none;user-select:none;-webkit-user-select:none}
 #clip-card-title{min-width:0;flex:1;overflow:hidden;color:#dce7e8;font-size:12px;font-weight:650;text-overflow:ellipsis;white-space:nowrap}
 .clip-card-actions{display:flex;align-items:center;gap:5px}
@@ -62,6 +62,8 @@ body.clipping #pinned-clip{display:none!important}
 #pinned-clip.maximized{left:8px!important;top:8px!important;width:calc(100vw - 16px)!important;height:calc(100vh - 16px)!important;max-width:none;max-height:none;resize:none;}
 #pinned-clip.minimized #clip-card-body{display:none}
 #pinned-clip.minimized{width:min(240px,calc(100vw - 24px));max-height:none}
+#clip-resize-handle{position:absolute;right:1px;bottom:1px;width:18px;height:18px;z-index:4;cursor:nwse-resize;touch-action:none;border-radius:0 0 9px 0;background:linear-gradient(135deg,transparent 0 42%,#71848d 43% 49%,transparent 50% 60%,#71848d 61% 67%,transparent 68%)}
+#pinned-clip.minimized #clip-resize-handle,#pinned-clip.maximized #clip-resize-handle{display:none}
 #clip-overlay:focus{outline:none}
 /* Android/mobile fallback: crop a screenshot selected from the gallery. */
 #clip-file-input{display:none}
@@ -118,6 +120,7 @@ body.clipping #pinned-clip{display:none!important}
     </div>
   </div>
   <div id="clip-card-body"><img id="pinned-image" alt="Captured PDF reference"></div>
+  <div id="clip-resize-handle" role="separator" aria-label="Resize reference window" title="Drag to resize"></div>
 </div>
 <script src="documents.js"></script>
 <script>
@@ -238,7 +241,7 @@ function showPinnedClip(data){
  $("pinned-image").src=data.image;
  $("pinned-image").style.width="100%";$("pinned-image").style.height="100%";$("pinned-image").style.maxWidth="none";$("pinned-image").style.maxHeight="none";$("pinned-image").style.objectFit="contain";$("pinned-image").style.transform="translate(0px, 0px) scale(1)";
  $("pinned-clip").classList.remove("maximized");
- $("clip-maximize").textContent="□";
+ $("clip-maximize").innerHTML='<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>';
  if(clipPdfUrl){URL.revokeObjectURL(clipPdfUrl);clipPdfUrl=null;}
  makeClipPdf(data.image).then(function(blob){if(clipData===data){clipPdfUrl=URL.createObjectURL(blob);}}).catch(function(){clipPdfUrl=null;});
  var label=(data.title||"PDF reference")+(data.page?" · p. "+data.page:"");
@@ -365,6 +368,12 @@ function finishCardDrag(e){
 }
 $("clip-drag-handle").addEventListener("pointerup",finishCardDrag);
 $("clip-drag-handle").addEventListener("pointercancel",finishCardDrag);
+/* Smooth custom resizing avoids native resize repaint lag. */
+var resizeCard=null,resizeFrame=0;
+$("clip-resize-handle").addEventListener("pointerdown",function(e){var card=$("#pinned-clip");if(card.classList.contains("maximized")||card.classList.contains("minimized"))return;var r=card.getBoundingClientRect();resizeCard={id:e.pointerId,x:e.clientX,y:e.clientY,w:r.width,h:r.height};this.setPointerCapture(e.pointerId);e.preventDefault();e.stopPropagation();});
+$("clip-resize-handle").addEventListener("pointermove",function(e){if(!resizeCard||e.pointerId!==resizeCard.id)return;var card=$("#pinned-clip");var w=Math.max(220,Math.min(window.innerWidth-card.offsetLeft-4,resizeCard.w+e.clientX-resizeCard.x));var h=Math.max(150,Math.min(window.innerHeight-card.offsetTop-4,resizeCard.h+e.clientY-resizeCard.y));if(resizeFrame)cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(function(){card.style.width=w+"px";card.style.height=h+"px";resizeFrame=0;});});
+function finishCardResize(e){if(resizeCard&&e.pointerId===resizeCard.id){resizeCard=null;if(resizeFrame){cancelAnimationFrame(resizeFrame);resizeFrame=0;}var card=$("#pinned-clip");if(clipData){clipData.width=card.offsetWidth;clipData.height=card.offsetHeight;savePinnedClip(clipData);}}}
+$("#clip-resize-handle").addEventListener("pointerup",finishCardResize);$("#clip-resize-handle").addEventListener("pointercancel",finishCardResize);
 $("clip-minimize").addEventListener("click",function(){
  var card=$("pinned-clip"),mini=card.classList.toggle("minimized");
  this.textContent=mini?"+":"−";this.title=mini?"Expand":"Minimize";this.setAttribute("aria-label",mini?"Expand clip":"Minimize clip");
@@ -381,8 +390,8 @@ $("clip-card-body").addEventListener("pointerup",endImagePan);$("clip-card-body"
 var restoreCardBounds=null;
 $("clip-maximize").addEventListener("click",function(){
  var card=$("pinned-clip"),maxed=card.classList.toggle("maximized");
- if(maxed){restoreCardBounds={left:card.style.left,top:card.style.top,width:card.style.width,height:card.style.height};this.textContent="❐";}
- else{if(restoreCardBounds){card.style.left=restoreCardBounds.left;card.style.top=restoreCardBounds.top;card.style.width=restoreCardBounds.width;card.style.height=restoreCardBounds.height;}this.textContent="□";}
+ if(maxed){restoreCardBounds={left:card.style.left,top:card.style.top,width:card.style.width,height:card.style.height};this.innerHTML='<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><rect x="7" y="3" width="14" height="14" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M17 7H5a2 2 0 0 0-2 2v12h12a2 2 0 0 0 2-2V7Z" fill="#18252e" stroke="currentColor" stroke-width="2"/></svg>';}
+ else{if(restoreCardBounds){card.style.left=restoreCardBounds.left;card.style.top=restoreCardBounds.top;card.style.width=restoreCardBounds.width;card.style.height=restoreCardBounds.height;}this.innerHTML='<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>';}
 });
 $("clip-close").addEventListener("click",function(){
  $("pinned-clip").style.display="none";clipData=null;if(clipPdfUrl){URL.revokeObjectURL(clipPdfUrl);clipPdfUrl=null;}try{sessionStorage.removeItem(PIN_KEY)}catch(e){}
