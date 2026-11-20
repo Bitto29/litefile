@@ -6,23 +6,23 @@
 <meta name="theme-color" content="#101820">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="apple-touch-icon" href="favicon.svg">
-
 <title>LiteFile Reader</title>
 <style>
-:root{color-scheme:dark;--bg:#101820;--surface:#18232d;--line:#2a3945;--text:#e8edf1;--muted:#94a2ad;font-family:Arial,Helvetica,sans-serif}
+:root{color-scheme:dark;--bg:#101820;--surface:#18232d;--line:#2a3945;--text:#e8edf1;--muted:#94a2ad;--accent:#a8d5c8;font-family:Arial,Helvetica,sans-serif}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:var(--bg);color:var(--text)}body{padding:10px 12px 0;overflow:hidden}
 .top{height:42px;display:flex;align-items:center;gap:9px;margin-bottom:8px}
 .icon-btn{width:40px;height:40px;flex:0 0 40px;display:grid;place-items:center;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--text);padding:0;cursor:pointer}
 .icon-btn svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.icon-btn:hover{border-color:var(--accent);color:var(--accent)}
 .title{min-width:0;flex:1;font-size:15px;font-weight:650;line-height:1.2;overflow-wrap:anywhere}
 #theater{position:relative}
 .pagebar{height:34px;display:flex;justify-content:flex-end;align-items:center;gap:7px;margin-bottom:7px}
 .pagebar label{font-size:12px;color:var(--muted)}
 .pagebar input{width:66px;height:32px;padding:4px 8px;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--text);font:inherit;font-size:13px}
-.pagebar button{height:32px;padding:0 12px;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--text);font:inherit;font-size:12px}
+.pagebar button{height:32px;padding:0 12px;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--text);font:inherit;font-size:12px;cursor:pointer}
 iframe{display:block;width:100%;height:calc(100dvh - 103px);min-height:240px;border:0;background:#fff}
 iframe:fullscreen{width:100vw;height:100vh;min-height:100vh}
-#viewer-stage{width:100%;height:calc(100dvh - 103px);min-height:240px;display:flex;align-items:stretch;justify-content:center;background:var(--bg)}
+#viewer-stage{position:relative;width:100%;height:calc(100dvh - 103px);min-height:240px;display:flex;align-items:stretch;justify-content:center;background:var(--bg)}
 #viewer-stage iframe{height:100%;min-height:0}
 body.theater-mode{background:var(--bg);padding-top:0}
 body.theater-mode .top,body.theater-mode .pagebar{display:none}
@@ -30,7 +30,46 @@ body.theater-mode #theater{position:fixed;z-index:20;right:14px;bottom:14px;widt
 body.theater-mode #theater:hover,body.theater-mode #theater:focus-visible{opacity:1}
 body.theater-mode #viewer-stage{width:100%;height:100dvh;min-height:100dvh;align-items:stretch;justify-content:center;background:var(--bg)}
 body.theater-mode #viewer{width:100%;height:100%;min-height:0;flex:1 1 auto;background:#fff}
+
+/* Pin Clip selection layer */
+#clip-overlay{display:none;position:fixed;z-index:1000;background:rgba(0,0,0,.02);touch-action:none;cursor:crosshair;user-select:none;-webkit-user-select:none}
+body.clipping #clip-overlay{display:block}
+#clip-selection{display:none;position:absolute;border:2px dashed var(--accent);background:rgba(168,213,200,.13);box-shadow:0 0 0 9999px rgba(0,0,0,.28);pointer-events:none}
+#clip-help{display:none;position:fixed;z-index:1003;left:50%;bottom:14px;transform:translateX(-50%);width:max-content;max-width:calc(100vw - 24px);padding:10px 14px;border:1px solid #3b5960;border-radius:10px;background:rgba(18,31,39,.96);color:var(--text);font-size:13px;line-height:1.35;text-align:center;box-shadow:0 8px 28px rgba(0,0,0,.35);pointer-events:none}
+body.clipping #clip-help{display:block}
+body.clipping #pinned-clip{display:none!important}
+
+/* The pinned reference card */
+#pinned-clip{display:none;position:fixed;z-index:1002;left:14px;top:112px;width:min(310px,calc(100vw - 24px));max-height:58vh;overflow:hidden;border:1px solid #40525c;border-radius:11px;background:#17232c;box-shadow:0 12px 36px rgba(0,0,0,.48);}
+.clip-card-bar{min-height:39px;display:flex;align-items:center;gap:8px;padding:6px 8px 6px 11px;background:#22313b;border-bottom:1px solid var(--line);cursor:move;touch-action:none;user-select:none;-webkit-user-select:none}
+#clip-card-title{min-width:0;flex:1;overflow:hidden;color:#dce7e8;font-size:12px;font-weight:650;text-overflow:ellipsis;white-space:nowrap}
+.clip-card-actions{display:flex;align-items:center;gap:5px}
+.clip-card-btn{width:27px;height:27px;display:grid;place-items:center;padding:0;border:1px solid #40515a;border-radius:7px;background:#18252e;color:#dce7e8;font-size:17px;line-height:1;cursor:pointer}
+.clip-card-btn:hover{border-color:var(--accent);color:var(--accent)}
+#clip-card-body{padding:5px;background:#0c1217}
+#pinned-image{display:block;width:100%;max-height:calc(58vh - 52px);object-fit:contain;border-radius:4px;background:#0c1217}
+#pinned-clip.minimized #clip-card-body{display:none}
+#pinned-clip.minimized{width:min(240px,calc(100vw - 24px));max-height:none}
+#clip-overlay:focus{outline:none}
+/* Android/mobile fallback: crop a screenshot selected from the gallery. */
+#clip-file-input{display:none}
+#photo-cropper{display:none;position:fixed;z-index:1200;inset:0;padding:14px;background:rgba(5,10,14,.97);align-items:center;justify-content:center}
+#photo-cropper.active{display:flex}
+.crop-panel{width:min(760px,100%);max-height:100%;display:flex;flex-direction:column;gap:12px}
+.crop-head{display:flex;align-items:center;gap:10px;color:var(--text);font-size:14px;font-weight:650}
+.crop-head span{min-width:0;flex:1}
+.crop-head button,.crop-footer button{height:38px;padding:0 13px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--text);font:inherit;cursor:pointer}
+.crop-area{display:flex;align-items:center;justify-content:center;min-height:120px;max-height:68vh;overflow:auto;border:1px solid var(--line);border-radius:10px;background:#05090c}
+#crop-image-wrap{position:relative;display:inline-block;max-width:100%;line-height:0}
+#crop-source{display:block;max-width:calc(100vw - 60px);max-height:66vh;width:auto;height:auto;object-fit:contain;user-select:none;-webkit-user-drag:none}
+#photo-crop-overlay{position:absolute;inset:0;touch-action:none;cursor:crosshair;user-select:none;-webkit-user-select:none}
+#photo-crop-selection{display:none;position:absolute;border:2px dashed var(--accent);background:rgba(168,213,200,.14);box-shadow:0 0 0 9999px rgba(0,0,0,.3);pointer-events:none}
+.crop-footer{display:flex;align-items:center;gap:10px}
+.crop-footer p{margin:0;min-width:0;flex:1;color:var(--muted);font-size:12px;line-height:1.4}
+.crop-footer button.primary{background:#a8d5c8;border-color:#a8d5c8;color:#101820;font-weight:700}
+.crop-footer button:disabled{opacity:.45;cursor:not-allowed}
 @media(min-width:700px){body{max-width:1100px;margin:0 auto}.top{margin-bottom:10px}iframe{height:calc(100dvh - 108px)}#viewer-stage{height:calc(100dvh - 108px)}}
+@media(max-width:420px){body{padding-left:8px;padding-right:8px}.top{gap:6px}.icon-btn{width:38px;height:38px;flex-basis:38px}.title{font-size:14px}#pinned-clip{left:8px;top:86px;width:min(270px,calc(100vw - 16px))}}
 </style>
 </head>
 <body>
@@ -39,10 +78,31 @@ body.theater-mode #viewer{width:100%;height:100%;min-height:0;flex:1 1 auto;back
 <div class="title" id="title">Loading document…</div>
 <button class="icon-btn" id="share" aria-label="Share document" title="Share"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.7 6.6-4.4M8.7 13.3l6.6 4.4"/></svg></button>
 <button class="icon-btn" id="theater" aria-label="Theater mode" title="Theater mode"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 9h18M7 5v4m10-4v4"/></svg></button>
+<button class="icon-btn" id="pin-clip" aria-label="Pin a PDF clip" title="Capture a PDF area and pin it"><svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m8 0h3a2 2 0 0 0 2-2v-3M8 8h8v8H8z"/></svg></button>
 <button class="icon-btn" id="fullscreen" aria-label="Full screen" title="Full screen"><svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m13-5h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></button>
 </div>
 <div class="pagebar"><label for="page">Page</label><input id="page" type="number" min="1" step="1" inputmode="numeric" value="1"><button id="go">Go</button></div>
 <div id="viewer-stage"><iframe id="viewer" title="Document" allowfullscreen></iframe></div>
+<div id="clip-overlay" aria-label="Drag to capture a PDF area"><div id="clip-selection"></div></div>
+<div id="clip-help">Drag over the question or answer to pin it · Press Esc to cancel</div>
+<input id="clip-file-input" type="file" accept="image/*" aria-label="Choose a screenshot">
+<div id="photo-cropper" role="dialog" aria-modal="true" aria-label="Crop screenshot">
+  <div class="crop-panel">
+    <div class="crop-head"><span>Crop a screenshot</span><button id="cancel-photo-crop" type="button">Cancel</button></div>
+    <div class="crop-area"><div id="crop-image-wrap"><img id="crop-source" alt="Screenshot to crop"><div id="photo-crop-overlay"><div id="photo-crop-selection"></div></div></div></div>
+    <div class="crop-footer"><p>Drag around the question or answer you want to keep.</p><button class="primary" id="pin-photo-crop" type="button" disabled>Pin crop</button></div>
+  </div>
+</div>
+<div id="pinned-clip" aria-label="Pinned PDF reference">
+  <div class="clip-card-bar" id="clip-drag-handle">
+    <span id="clip-card-title">Pinned reference</span>
+    <div class="clip-card-actions">
+      <button class="clip-card-btn" id="clip-minimize" type="button" aria-label="Minimize clip" title="Minimize">−</button>
+      <button class="clip-card-btn" id="clip-close" type="button" aria-label="Remove pinned clip" title="Remove">×</button>
+    </div>
+  </div>
+  <div id="clip-card-body"><img id="pinned-image" alt="Captured PDF reference"></div>
+</div>
 <script src="documents.js"></script>
 <script>
 (function(){
@@ -53,7 +113,10 @@ var id=params.get("id");
 var doc=docs.find(function(d){return d.id===id});
 var page=params.get("page")||"1";
 var $=function(id){return document.getElementById(id)};
-if(!doc){$("title").textContent="Document not found";$("viewer").hidden=true;$("page").disabled=true;$("go").disabled=true;return}
+var PIN_KEY="litefile:pinned-clip:v1";
+var captureStream=null,captureVideo=null,selecting=false,dragStart=null;
+var clipData=null;
+if(!doc){$("title").textContent="Document not found";$("viewer").hidden=true;$("page").disabled=true;$("go").disabled=true;$("pin-clip").disabled=true;return}
 document.title=doc.title+" · LiteFile";
 $("title").textContent=doc.title;
 var ratio=Number(doc.aspectRatio)||0.707;
@@ -75,10 +138,193 @@ $("back").addEventListener("click",function(){location.href="index.html#folder="
 $("share").addEventListener("click",share);
 function setTheater(enabled){document.body.classList.toggle("theater-mode",enabled);$("theater").setAttribute("aria-label",enabled?"Exit theater mode":"Theater mode");$("theater").title=enabled?"Exit theater mode":"Theater mode";}
 $("theater").addEventListener("click",function(){setTheater(!document.body.classList.contains("theater-mode"));});
-document.addEventListener("keydown",function(e){if(e.key==="Escape"&&document.body.classList.contains("theater-mode"))setTheater(false);});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"){if(selecting)cancelClipSelection();else if(document.body.classList.contains("theater-mode"))setTheater(false);}});
 $("fullscreen").addEventListener("click",function(){var frame=$("viewer");var fn=frame.requestFullscreen||frame.webkitRequestFullscreen;if(fn){var result=fn.call(frame);if(result&&result.catch)result.catch(function(){alert("Fullscreen is not supported by this browser.")})}});
 $("go").addEventListener("click",function(){loadPage($("page").value)});
 $("page").addEventListener("keydown",function(e){if(e.key==="Enter")loadPage(this.value)});
+
+/* Pin Clip: capture the visible tab, crop a dragged rectangle, and keep it in this tab. */
+function stopScreenCapture(){
+ if(captureStream){captureStream.getTracks().forEach(function(track){track.stop()});captureStream=null;}
+ if(captureVideo){try{captureVideo.pause();captureVideo.srcObject=null}catch(e){}captureVideo=null;}
+}
+function updateSelectionBox(x,y,w,h){var box=$("clip-selection");box.style.display="block";box.style.left=x+"px";box.style.top=y+"px";box.style.width=w+"px";box.style.height=h+"px";}
+function cancelClipSelection(){
+ selecting=false;dragStart=null;document.body.classList.remove("clipping");$("clip-selection").style.display="none";stopScreenCapture();
+}
+function openScreenshotPicker(){
+ $("clip-file-input").value="";
+ $("clip-file-input").click();
+}
+async function startClipSelection(){
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getDisplayMedia){openScreenshotPicker();return;}
+ if(!window.isSecureContext){alert("Pin Clip needs a secure HTTPS page.");return;}
+ try{
+  var stream=await navigator.mediaDevices.getDisplayMedia({video:{frameRate:15},audio:false});
+  captureStream=stream;
+  captureVideo=document.createElement("video");captureVideo.muted=true;captureVideo.playsInline=true;captureVideo.srcObject=stream;
+  await captureVideo.play();
+  if(!captureVideo.videoWidth||!captureVideo.videoHeight)await new Promise(function(resolve){setTimeout(resolve,250)});
+  if(!captureVideo.videoWidth||!captureVideo.videoHeight)throw new Error("The captured tab did not provide a video frame.");
+  var stage=$("viewer-stage").getBoundingClientRect();
+  var overlay=$("clip-overlay");overlay.style.left=stage.left+"px";overlay.style.top=stage.top+"px";overlay.style.width=stage.width+"px";overlay.style.height=stage.height+"px";
+  selecting=true;dragStart=null;document.body.classList.add("clipping");
+ }catch(error){
+  stopScreenCapture();
+  if(error&&error.name==="NotAllowedError")return;
+  alert("Could not start screen capture. Try taking a screenshot and choosing it from your gallery instead.");
+ }
+}
+function savePinnedClip(data){
+ try{sessionStorage.setItem(PIN_KEY,JSON.stringify(data));return true;}catch(e){return false;}
+}
+function pinCanvas(canvas,sourceLabel){
+ try{
+  var data={image:canvas.toDataURL("image/jpeg",0.9),title:doc.title+(sourceLabel?" · "+sourceLabel:""),page:$("page").value||"1",left:14,top:112};
+  showPinnedClip(data);
+  if(!savePinnedClip(data))alert("The clip is pinned for this page, but your browser could not save it for the next PDF. Try a smaller selection.");
+ }catch(e){alert("Could not create the clip. Please select a smaller area and try again.");}
+}
+function showPinnedClip(data){
+ clipData=data;
+ $("pinned-image").src=data.image;
+ var label=(data.title||"PDF reference")+(data.page?" · p. "+data.page:"");
+ $("clip-card-title").textContent=label;
+ $("pinned-clip").classList.remove("minimized");
+ $("clip-minimize").textContent="−";$("clip-minimize").title="Minimize";$("clip-minimize").setAttribute("aria-label","Minimize clip");
+ $("pinned-clip").style.display="block";
+ var card=$("pinned-clip");
+ var left=Number.isFinite(Number(data.left))?Number(data.left):14;
+ var top=Number.isFinite(Number(data.top))?Number(data.top):112;
+ requestAnimationFrame(function(){
+  var maxLeft=Math.max(4,window.innerWidth-card.offsetWidth-4),maxTop=Math.max(4,window.innerHeight-card.offsetHeight-4);
+  left=Math.max(4,Math.min(left,maxLeft));top=Math.max(4,Math.min(top,maxTop));
+  card.style.left=left+"px";card.style.top=top+"px";
+  data.left=left;data.top=top;savePinnedClip(data);
+ });
+}
+function captureSelectedArea(x,y,w,h){
+ if(!captureVideo||!captureVideo.videoWidth){cancelClipSelection();return;}
+ /* Hide the selection tint before taking the frame so the pinned image stays clean. */
+ selecting=false;document.body.classList.remove("clipping");$("clip-selection").style.display="none";
+ requestAnimationFrame(function(){setTimeout(function(){captureSelectedAreaFrame(x,y,w,h);},120);});
+}
+function captureSelectedAreaFrame(x,y,w,h){
+ if(!captureVideo||!captureVideo.videoWidth){cancelClipSelection();return;}
+ var stage=$("viewer-stage").getBoundingClientRect();
+ var sx=(stage.left+x)*(captureVideo.videoWidth/window.innerWidth);
+ var sy=(stage.top+y)*(captureVideo.videoHeight/window.innerHeight);
+ var sw=w*(captureVideo.videoWidth/window.innerWidth);
+ var sh=h*(captureVideo.videoHeight/window.innerHeight);
+ sx=Math.max(0,Math.min(sx,captureVideo.videoWidth-1));sy=Math.max(0,Math.min(sy,captureVideo.videoHeight-1));
+ sw=Math.max(1,Math.min(sw,captureVideo.videoWidth-sx));sh=Math.max(1,Math.min(sh,captureVideo.videoHeight-sy));
+ var scale=Math.min(1,1200/Math.max(sw,sh));
+ var canvas=document.createElement("canvas");canvas.width=Math.max(1,Math.round(sw*scale));canvas.height=Math.max(1,Math.round(sh*scale));
+ var ctx=canvas.getContext("2d");
+ try{
+  ctx.drawImage(captureVideo,sx,sy,sw,sh,0,0,canvas.width,canvas.height);
+  var image=canvas.toDataURL("image/jpeg",0.9);
+  var data={image:image,title:doc.title,page:$("page").value||"1",left:14,top:112};
+  showPinnedClip(data);
+  if(!savePinnedClip(data))alert("The clip is pinned for this page, but your browser could not save it for the next PDF. Try a smaller selection.");
+ }catch(e){alert("Could not create the clip. Please select a smaller area and try again.");}
+ cancelClipSelection();
+}
+$("pin-clip").addEventListener("click",function(){if(selecting)cancelClipSelection();else startClipSelection();});
+$("clip-overlay").addEventListener("pointerdown",function(e){
+ if(!selecting)return;
+ var rect=this.getBoundingClientRect();
+ var x=Math.max(0,Math.min(rect.width,e.clientX-rect.left));var y=Math.max(0,Math.min(rect.height,e.clientY-rect.top));
+ dragStart={x:x,y:y};this.setPointerCapture(e.pointerId);updateSelectionBox(x,y,0,0);
+});
+$("clip-overlay").addEventListener("pointermove",function(e){
+ if(!selecting||!dragStart)return;
+ var rect=this.getBoundingClientRect();var x=Math.max(0,Math.min(rect.width,e.clientX-rect.left));var y=Math.max(0,Math.min(rect.height,e.clientY-rect.top));
+ updateSelectionBox(Math.min(x,dragStart.x),Math.min(y,dragStart.y),Math.abs(x-dragStart.x),Math.abs(y-dragStart.y));
+});
+$("clip-overlay").addEventListener("pointerup",function(e){
+ if(!selecting||!dragStart)return;
+ var rect=this.getBoundingClientRect();var x=Math.max(0,Math.min(rect.width,e.clientX-rect.left));var y=Math.max(0,Math.min(rect.height,e.clientY-rect.top));
+ var sx=Math.min(x,dragStart.x),sy=Math.min(y,dragStart.y),w=Math.abs(x-dragStart.x),h=Math.abs(y-dragStart.y);
+ dragStart=null;
+ if(w<24||h<24){cancelClipSelection();return;}
+ captureSelectedArea(sx,sy,w,h);
+});
+$("clip-overlay").addEventListener("pointercancel",cancelClipSelection);
+
+/* Gallery screenshot fallback used by Android browsers without getDisplayMedia(). */
+var photoSelection=null,photoObjectUrl=null;
+function resetPhotoCropper(){
+ $("photo-cropper").classList.remove("active");$("photo-crop-selection").style.display="none";photoSelection=null;$("pin-photo-crop").disabled=true;
+ if(photoObjectUrl){URL.revokeObjectURL(photoObjectUrl);photoObjectUrl=null;}
+ $("crop-source").removeAttribute("src");
+}
+$("clip-file-input").addEventListener("change",function(){
+ var file=this.files&&this.files[0];if(!file)return;
+ if(!file.type||file.type.indexOf("image/")!==0){alert("Choose an image screenshot from your gallery.");return;}
+ if(photoObjectUrl)URL.revokeObjectURL(photoObjectUrl);
+ photoObjectUrl=URL.createObjectURL(file);var img=$("crop-source");
+ img.onload=function(){$("photo-cropper").classList.add("active");photoSelection=null;$("photo-crop-selection").style.display="none";$("pin-photo-crop").disabled=true;};
+ img.onerror=function(){resetPhotoCropper();alert("Could not open that screenshot.");};
+ img.src=photoObjectUrl;
+});
+$("cancel-photo-crop").addEventListener("click",resetPhotoCropper);
+$("photo-crop-overlay").addEventListener("pointerdown",function(e){
+ var r=this.getBoundingClientRect();var x=Math.max(0,Math.min(r.width,e.clientX-r.left)),y=Math.max(0,Math.min(r.height,e.clientY-r.top));
+ photoSelection={x:x,y:y,w:0,h:0};this.setPointerCapture(e.pointerId);var b=$("photo-crop-selection");b.style.display="block";b.style.left=x+"px";b.style.top=y+"px";b.style.width="0px";b.style.height="0px";
+});
+$("photo-crop-overlay").addEventListener("pointermove",function(e){
+ if(!photoSelection)return;var r=this.getBoundingClientRect();var x=Math.max(0,Math.min(r.width,e.clientX-r.left)),y=Math.max(0,Math.min(r.height,e.clientY-r.top));
+ var left=Math.min(x,photoSelection.x),top=Math.min(y,photoSelection.y),w=Math.abs(x-photoSelection.x),h=Math.abs(y-photoSelection.y);
+ photoSelection.left=left;photoSelection.top=top;photoSelection.w=w;photoSelection.h=h;
+ var b=$("photo-crop-selection");b.style.left=left+"px";b.style.top=top+"px";b.style.width=w+"px";b.style.height=h+"px";
+});
+function endPhotoSelection(){if(photoSelection&&photoSelection.w>=20&&photoSelection.h>=20){$("pin-photo-crop").disabled=false;}else{photoSelection=null;$("photo-crop-selection").style.display="none";$("pin-photo-crop").disabled=true;}}
+$("photo-crop-overlay").addEventListener("pointerup",endPhotoSelection);
+$("photo-crop-overlay").addEventListener("pointercancel",endPhotoSelection);
+$("pin-photo-crop").addEventListener("click",function(){
+ if(!photoSelection)return;var img=$("crop-source"),r=img.getBoundingClientRect();
+ var scaleX=img.naturalWidth/r.width,scaleY=img.naturalHeight/r.height;
+ var sx=photoSelection.left*scaleX,sy=photoSelection.top*scaleY,sw=photoSelection.w*scaleX,sh=photoSelection.h*scaleY;
+ var scale=Math.min(1,1200/Math.max(sw,sh));var canvas=document.createElement("canvas");canvas.width=Math.max(1,Math.round(sw*scale));canvas.height=Math.max(1,Math.round(sh*scale));
+ try{canvas.getContext("2d").drawImage(img,sx,sy,sw,sh,0,0,canvas.width,canvas.height);resetPhotoCropper();pinCanvas(canvas,"screenshot");}
+ catch(e){alert("Could not crop this screenshot. Please try again.");}
+});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&$("photo-cropper").classList.contains("active"))resetPhotoCropper();});
+
+/* Drag the pinned card by its title bar. Position and image survive reader-page navigation in this tab. */
+var dragCard=null;
+$("clip-drag-handle").addEventListener("pointerdown",function(e){
+ if(e.target.closest("button"))return;
+ var card=$("pinned-clip"),r=card.getBoundingClientRect();dragCard={pointerId:e.pointerId,x:e.clientX,y:e.clientY,left:r.left,top:r.top};
+ this.setPointerCapture(e.pointerId);e.preventDefault();
+});
+$("clip-drag-handle").addEventListener("pointermove",function(e){
+ if(!dragCard||e.pointerId!==dragCard.pointerId)return;
+ var card=$("pinned-clip");var left=dragCard.left+e.clientX-dragCard.x;var top=dragCard.top+e.clientY-dragCard.y;
+ left=Math.max(4,Math.min(left,window.innerWidth-card.offsetWidth-4));top=Math.max(4,Math.min(top,window.innerHeight-card.offsetHeight-4));
+ card.style.left=left+"px";card.style.top=top+"px";
+});
+function finishCardDrag(e){
+ if(!dragCard||e.pointerId!==dragCard.pointerId)return;
+ dragCard=null;if(clipData){clipData.left=$("pinned-clip").offsetLeft;clipData.top=$("pinned-clip").offsetTop;savePinnedClip(clipData);}
+}
+$("clip-drag-handle").addEventListener("pointerup",finishCardDrag);
+$("clip-drag-handle").addEventListener("pointercancel",finishCardDrag);
+$("clip-minimize").addEventListener("click",function(){
+ var card=$("pinned-clip"),mini=card.classList.toggle("minimized");
+ this.textContent=mini?"+":"−";this.title=mini?"Expand":"Minimize";this.setAttribute("aria-label",mini?"Expand clip":"Minimize clip");
+});
+$("clip-close").addEventListener("click",function(){
+ $("pinned-clip").style.display="none";clipData=null;try{sessionStorage.removeItem(PIN_KEY)}catch(e){}
+});
+window.addEventListener("resize",function(){
+ var card=$("pinned-clip");if(card.style.display==="none")return;
+ var left=Math.max(4,Math.min(card.offsetLeft,window.innerWidth-card.offsetWidth-4));var top=Math.max(4,Math.min(card.offsetTop,window.innerHeight-card.offsetHeight-4));
+ card.style.left=left+"px";card.style.top=top+"px";
+ if(clipData){clipData.left=left;clipData.top=top;savePinnedClip(clipData);}
+});
+try{var saved=sessionStorage.getItem(PIN_KEY);if(saved){var parsed=JSON.parse(saved);if(parsed&&typeof parsed.image==="string"&&parsed.image.indexOf("data:image/")===0)showPinnedClip(parsed);}}catch(e){}
 loadPage(page);
 }());
 </script>
