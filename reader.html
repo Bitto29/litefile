@@ -20,9 +20,9 @@
 .pagebar label{font-size:12px;color:var(--muted)}
 .pagebar input{width:66px;height:32px;padding:4px 8px;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--text);font:inherit;font-size:13px}
 .pagebar button{height:32px;padding:0 12px;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--text);font:inherit;font-size:12px;cursor:pointer}
-iframe{display:block;width:100%;height:calc(100dvh - 103px);min-height:240px;border:0;background:#fff}
+iframe{display:block;width:100%;height:calc(100dvh - 60px);min-height:240px;border:0;background:#fff}
 iframe:fullscreen{width:100vw;height:100vh;min-height:100vh}
-#viewer-stage{position:relative;width:100%;height:calc(100dvh - 103px);min-height:240px;display:flex;align-items:stretch;justify-content:center;background:var(--bg)}
+#viewer-stage{position:relative;width:100%;height:calc(100dvh - 60px);min-height:240px;display:flex;align-items:stretch;justify-content:center;background:var(--bg)}
 #viewer-stage iframe{height:100%;min-height:0}
 body.theater-mode{background:var(--bg);padding-top:0}
 body.theater-mode .top{display:flex;position:fixed;z-index:1100;right:14px;bottom:14px;width:auto;height:42px;margin:0;gap:7px}
@@ -82,7 +82,7 @@ body.clipping #pinned-clip{display:none!important}
 .crop-footer p{margin:0;min-width:0;flex:1;color:var(--muted);font-size:12px;line-height:1.4}
 .crop-footer button.primary{background:#a8d5c8;border-color:#a8d5c8;color:#101820;font-weight:700}
 .crop-footer button:disabled{opacity:.45;cursor:not-allowed}
-@media(min-width:700px){body{max-width:1100px;margin:0 auto}.top{margin-bottom:10px}iframe{height:calc(100dvh - 108px)}#viewer-stage{height:calc(100dvh - 108px)}}
+@media(min-width:700px){body{max-width:1100px;margin:0 auto}.top{margin-bottom:10px}iframe{height:calc(100dvh - 60px)}#viewer-stage{height:calc(100dvh - 60px)}}
 @media(max-width:420px){
 body{padding:7px 7px 0}
 .top{height:36px;gap:3px;margin-bottom:7px;display:flex;align-items:center;flex-wrap:nowrap}
