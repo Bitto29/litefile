@@ -114,7 +114,7 @@ body.clipping #pinned-clip{display:none!important}
       <button class="clip-card-btn" id="clip-zoom-out" type="button" aria-label="Zoom out" title="Zoom out">−</button>
       <button class="clip-card-btn" id="clip-zoom-in" type="button" aria-label="Zoom in" title="Zoom in">+</button>
       <button class="clip-card-btn" id="clip-fit" type="button" aria-label="Fit clip" title="Fit to window">↔</button>
-      <button class="clip-card-btn" id="clip-maximize" type="button" aria-label="Maximize clip" title="Maximize / restore">□</button>
+      <button class="clip-card-btn" id="clip-maximize" type="button" aria-label="Maximize clip" title="Maximize / restore"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <button class="clip-card-btn" id="clip-minimize" type="button" aria-label="Minimize clip" title="Minimize">−</button>
       <button class="clip-card-btn" id="clip-close" type="button" aria-label="Remove pinned clip" title="Remove">×</button>
     </div>
@@ -241,7 +241,7 @@ function showPinnedClip(data){
  $("pinned-image").src=data.image;
  $("pinned-image").style.width="100%";$("pinned-image").style.height="100%";$("pinned-image").style.maxWidth="none";$("pinned-image").style.maxHeight="none";$("pinned-image").style.objectFit="contain";$("pinned-image").style.transform="translate(0px, 0px) scale(1)";
  $("pinned-clip").classList.remove("maximized");
- $("clip-maximize").innerHTML='<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>';
+ $("clip-maximize").innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
  if(clipPdfUrl){URL.revokeObjectURL(clipPdfUrl);clipPdfUrl=null;}
  makeClipPdf(data.image).then(function(blob){if(clipData===data){clipPdfUrl=URL.createObjectURL(blob);}}).catch(function(){clipPdfUrl=null;});
  var label=(data.title||"PDF reference")+(data.page?" · p. "+data.page:"");
