@@ -49,7 +49,7 @@ if(navigator.share){navigator.share(data).catch(function(e){if(e.name!=="AbortEr
 function copy(url){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(function(){alert("Share link copied")}).catch(function(){prompt("Copy link:",url)})}else prompt("Copy link:",url)}
 function folders(){
 $("folderBack").hidden=true;$("heading").textContent="Folders";$("description").textContent="Choose a folder to see its documents.";
-var names=Array.from(new Set(docs.filter(function(d){return !!d.folder}).map(function(d){return d.folder}))).sort();
+var names=Array.from(new Set(docs.filter(function(d){return !!d.folder}).map(function(d){return d.folder}))).sort(function(a,b){if(a==="Meditricks")return -1;if(b==="Meditricks")return 1;return a.localeCompare(b)});
 $("items").innerHTML=names.length?names.map(function(name){
 var count=docs.filter(function(d){return(d.folder||"Unsorted")===name}).length;
 return '<div class="row"><div class="folder-icon"><svg viewBox="0 0 24 24"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5H10l2 2h7.5A1.5 1.5 0 0 1 21 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5z"/></svg></div><button class="open item-main" data-folder="'+esc(name)+'"><div class="item-title">'+esc(name)+'</div><div class="item-sub">'+count+' '+(count===1?"document":"documents")+'</div></button></div>'
