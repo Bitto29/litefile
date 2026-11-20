@@ -49,14 +49,15 @@ body.clipping #pinned-clip{display:none!important}
 #pinned-clip.minimized{height:auto;resize:none}
 #pinned-clip.minimized #clip-card-body{display:none}
 
-#pinned-clip{display:none;position:fixed;z-index:1002;left:14px;top:112px;width:min(310px,calc(100vw - 24px));max-height:58vh;overflow:hidden;border:1px solid #40525c;border-radius:11px;background:#17232c;box-shadow:0 12px 36px rgba(0,0,0,.48);}
+#pinned-clip{display:none;position:fixed;z-index:1002;left:14px;top:112px;width:min(420px,calc(100vw - 24px));height:min(420px,68vh);min-width:220px;min-height:150px;max-width:calc(100vw - 8px);max-height:calc(100vh - 16px);resize:both;overflow:hidden;border:1px solid #40525c;border-radius:11px;background:#17232c;box-shadow:0 12px 36px rgba(0,0,0,.48);}
 .clip-card-bar{min-height:39px;display:flex;align-items:center;gap:8px;padding:6px 8px 6px 11px;background:#22313b;border-bottom:1px solid var(--line);cursor:move;touch-action:none;user-select:none;-webkit-user-select:none}
 #clip-card-title{min-width:0;flex:1;overflow:hidden;color:#dce7e8;font-size:12px;font-weight:650;text-overflow:ellipsis;white-space:nowrap}
 .clip-card-actions{display:flex;align-items:center;gap:5px}
 .clip-card-btn{width:27px;height:27px;display:grid;place-items:center;padding:0;border:1px solid #40515a;border-radius:7px;background:#18252e;color:#dce7e8;font-size:17px;line-height:1;cursor:pointer}
 .clip-card-btn:hover{border-color:var(--accent);color:var(--accent)}
-#clip-card-body{padding:5px;background:#0c1217}
-#pinned-image{display:block;width:100%;max-height:calc(58vh - 52px);object-fit:contain;border-radius:4px;background:#0c1217}
+#clip-card-body{height:calc(100% - 39px);min-height:0;padding:6px;background:#0c1217;overflow:auto;display:block;overscroll-behavior:contain}
+#pinned-image{display:block;width:100%;max-width:none;height:auto;max-height:none;object-fit:contain;transform-origin:top left;border-radius:4px;background:#0c1217}
+#pinned-clip.maximized{left:8px!important;top:8px!important;width:calc(100vw - 16px)!important;height:calc(100vh - 16px)!important;max-width:none;max-height:none;resize:none;}
 #pinned-clip.minimized #clip-card-body{display:none}
 #pinned-clip.minimized{width:min(240px,calc(100vw - 24px));max-height:none}
 #clip-overlay:focus{outline:none}
@@ -110,6 +111,7 @@ body.clipping #pinned-clip{display:none!important}
       <button class="clip-card-btn" id="clip-zoom-in" type="button" aria-label="Zoom in" title="Zoom in">+</button>
       <button class="clip-card-btn" id="clip-fit" type="button" aria-label="Fit clip" title="Fit to window">↔</button>
       <button class="clip-card-btn" id="clip-download" type="button" aria-label="Download clipped PDF" title="Download as PDF">↓</button>
+      <button class="clip-card-btn" id="clip-maximize" type="button" aria-label="Maximize clip" title="Maximize / restore">□</button>
       <button class="clip-card-btn" id="clip-minimize" type="button" aria-label="Minimize clip" title="Minimize">−</button>
       <button class="clip-card-btn" id="clip-close" type="button" aria-label="Remove pinned clip" title="Remove">×</button>
     </div>
@@ -212,6 +214,9 @@ function makeClipPdf(dataUrl){
 function showPinnedClip(data){
  clipData=data;clipZoom=1;
  $("pinned-image").src=data.image;
+ $("pinned-image").style.width="100%";$("pinned-image").style.maxWidth="none";
+ $("pinned-clip").classList.remove("maximized");
+ $("clip-maximize").textContent="□";
  if(clipPdfUrl){URL.revokeObjectURL(clipPdfUrl);clipPdfUrl=null;}
  makeClipPdf(data.image).then(function(blob){if(clipData===data){clipPdfUrl=URL.createObjectURL(blob);}}).catch(function(){clipPdfUrl=null;});
  var label=(data.title||"PDF reference")+(data.page?" · p. "+data.page:"");
@@ -341,10 +346,16 @@ $("clip-minimize").addEventListener("click",function(){
  var card=$("pinned-clip"),mini=card.classList.toggle("minimized");
  this.textContent=mini?"+":"−";this.title=mini?"Expand":"Minimize";this.setAttribute("aria-label",mini?"Expand clip":"Minimize clip");
 });
-function applyClipZoom(){ $("pinned-image").style.width=(clipZoom*100)+"%";$("pinned-image").style.maxWidth="none"; }
+function applyClipZoom(){var img=$("pinned-image");img.style.width=(clipZoom*100)+"%";img.style.maxWidth="none";img.style.height="auto";}
 $("clip-zoom-in").addEventListener("click",function(){clipZoom=Math.min(4,clipZoom+0.2);applyClipZoom();});
 $("clip-zoom-out").addEventListener("click",function(){clipZoom=Math.max(0.4,clipZoom-0.2);applyClipZoom();});
-$("clip-fit").addEventListener("click",function(){clipZoom=1;var img=$("pinned-image");img.style.width="100%";img.style.maxWidth="100%";});
+$("clip-fit").addEventListener("click",function(){clipZoom=1;var img=$("pinned-image");img.style.width="100%";img.style.maxWidth="none";img.style.height="auto";$("clip-card-body").scrollTop=0;$("clip-card-body").scrollLeft=0;});
+var restoreCardBounds=null;
+$("clip-maximize").addEventListener("click",function(){
+ var card=$("pinned-clip"),maxed=card.classList.toggle("maximized");
+ if(maxed){restoreCardBounds={left:card.style.left,top:card.style.top,width:card.style.width,height:card.style.height};this.textContent="❐";}
+ else{if(restoreCardBounds){card.style.left=restoreCardBounds.left;card.style.top=restoreCardBounds.top;card.style.width=restoreCardBounds.width;card.style.height=restoreCardBounds.height;}this.textContent="□";}
+});
 $("clip-download").addEventListener("click",function(){
  if(!clipData)return;
  makeClipPdf(clipData.image).then(function(blob){var url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="LiteFile-clip-page-"+(clipData.page||"1")+".pdf";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},1500);}).catch(function(){alert("Could not create the PDF file.");});
