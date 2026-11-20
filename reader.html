@@ -36,6 +36,8 @@ body.theater-mode #viewer{width:100%;height:100%;min-height:0;flex:1 1 auto;back
 /* Pin Clip selection layer */
 #clip-overlay{display:none;position:fixed;z-index:1000;background:rgba(0,0,0,.02);touch-action:none;cursor:crosshair;user-select:none;-webkit-user-select:none}
 body.clipping #clip-overlay{display:block}
+body.clipping #clip-overlay{position:fixed;inset:0;z-index:1001;background:rgba(0,0,0,.04)}
+body.clipping #clip-help{z-index:1004}
 #clip-selection{display:none;position:absolute;border:2px dashed var(--accent);background:rgba(168,213,200,.13);box-shadow:0 0 0 9999px rgba(0,0,0,.28);pointer-events:none}
 #clip-help{display:none;position:fixed;z-index:1003;left:50%;bottom:14px;transform:translateX(-50%);width:max-content;max-width:calc(100vw - 24px);padding:10px 14px;border:1px solid #3b5960;border-radius:10px;background:rgba(18,31,39,.96);color:var(--text);font-size:13px;line-height:1.35;text-align:center;box-shadow:0 8px 28px rgba(0,0,0,.35);pointer-events:none}
 body.clipping #clip-help{display:block}
@@ -172,9 +174,30 @@ function openScreenshotPicker(){
  $("clip-file-input").click();
 }
 function startClipSelection(){
- /* Scribd is cross-origin, so the embedded page cannot be read or captured directly.
-    Use a user-selected screenshot instead of requesting repeated screen-share permission. */
- openScreenshotPicker();
+ /* Desktop capture: browser permission is required, then crop the shared tab/screen. */
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getDisplayMedia){
+  alert("Screen capture is not supported in this browser. You can still choose a screenshot.");
+  openScreenshotPicker();return;
+ }
+ navigator.mediaDevices.getDisplayMedia({video:{frameRate:30},audio:false})
+ .then(function(stream){
+  stopScreenCapture();captureStream=stream;
+  captureVideo=document.createElement("video");
+  captureVideo.muted=true;captureVideo.playsInline=true;captureVideo.srcObject=stream;
+  captureVideo.onloadedmetadata=function(){
+   captureVideo.play().then(function(){
+    selecting=true;document.body.classList.add("clipping");
+    $("clip-help").textContent="Drag over the shared screen to crop and pin · Esc to cancel";
+    $("clip-overlay").style.position="fixed";
+    $("clip-overlay").style.inset="0";
+    $("clip-overlay").style.display="block";
+   }).catch(function(){cancelClipSelection();alert("Could not start the screen preview.");});
+  };
+  stream.getVideoTracks()[0].addEventListener("ended",function(){if(selecting)cancelClipSelection();});
+ })
+ .catch(function(err){
+  if(err&&err.name!=="NotAllowedError"&&err.name!=="AbortError")alert("Could not start screen capture. "+(err.message||""));
+ });
 }
 function savePinnedClip(data){
  try{sessionStorage.setItem(PIN_KEY,JSON.stringify(data));return true;}catch(e){return false;}
