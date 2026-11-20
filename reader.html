@@ -42,6 +42,13 @@ body.clipping #clip-help{display:block}
 body.clipping #pinned-clip{display:none!important}
 
 /* The pinned reference card */
+#pinned-clip{resize:both;min-width:220px;min-height:120px;width:min(360px,calc(100vw - 24px));height:min(360px,58vh);max-width:calc(100vw - 8px);max-height:82vh;overflow:hidden}
+.clip-card-actions{gap:4px}
+#clip-card-body{height:calc(100% - 39px);overflow:auto;display:flex;align-items:center;justify-content:center}
+#pinned-image{width:100%;height:auto;max-height:none;object-fit:contain;transform-origin:center center}
+#pinned-clip.minimized{height:auto;resize:none}
+#pinned-clip.minimized #clip-card-body{display:none}
+
 #pinned-clip{display:none;position:fixed;z-index:1002;left:14px;top:112px;width:min(310px,calc(100vw - 24px));max-height:58vh;overflow:hidden;border:1px solid #40525c;border-radius:11px;background:#17232c;box-shadow:0 12px 36px rgba(0,0,0,.48);}
 .clip-card-bar{min-height:39px;display:flex;align-items:center;gap:8px;padding:6px 8px 6px 11px;background:#22313b;border-bottom:1px solid var(--line);cursor:move;touch-action:none;user-select:none;-webkit-user-select:none}
 #clip-card-title{min-width:0;flex:1;overflow:hidden;color:#dce7e8;font-size:12px;font-weight:650;text-overflow:ellipsis;white-space:nowrap}
@@ -99,6 +106,10 @@ body.clipping #pinned-clip{display:none!important}
   <div class="clip-card-bar" id="clip-drag-handle">
     <span id="clip-card-title">Pinned reference</span>
     <div class="clip-card-actions">
+      <button class="clip-card-btn" id="clip-zoom-out" type="button" aria-label="Zoom out" title="Zoom out">−</button>
+      <button class="clip-card-btn" id="clip-zoom-in" type="button" aria-label="Zoom in" title="Zoom in">+</button>
+      <button class="clip-card-btn" id="clip-fit" type="button" aria-label="Fit clip" title="Fit to window">↔</button>
+      <button class="clip-card-btn" id="clip-download" type="button" aria-label="Download clipped PDF" title="Download as PDF">↓</button>
       <button class="clip-card-btn" id="clip-minimize" type="button" aria-label="Minimize clip" title="Minimize">−</button>
       <button class="clip-card-btn" id="clip-close" type="button" aria-label="Remove pinned clip" title="Remove">×</button>
     </div>
@@ -117,7 +128,7 @@ var page=params.get("page")||"1";
 var $=function(id){return document.getElementById(id)};
 var PIN_KEY="litefile:pinned-clip:v1";
 var captureStream=null,captureVideo=null,selecting=false,dragStart=null;
-var clipData=null;
+var clipData=null,clipZoom=1,clipPdfUrl=null;
 if(!doc){$("title").textContent="Document not found";$("viewer").hidden=true;$("page").disabled=true;$("go").disabled=true;$("pin-clip").disabled=true;return}
 document.title=doc.title+" · LiteFile";
 $("title").textContent=doc.title;
@@ -158,38 +169,51 @@ function openScreenshotPicker(){
  $("clip-file-input").value="";
  $("clip-file-input").click();
 }
-async function startClipSelection(){
- if(!navigator.mediaDevices||!navigator.mediaDevices.getDisplayMedia){openScreenshotPicker();return;}
- if(!window.isSecureContext){alert("Pin Clip needs a secure HTTPS page.");return;}
- try{
-  var stream=await navigator.mediaDevices.getDisplayMedia({video:{displaySurface:"browser",frameRate:15},audio:false});
-  captureStream=stream;
-  captureVideo=document.createElement("video");captureVideo.muted=true;captureVideo.playsInline=true;captureVideo.srcObject=stream;
-  await captureVideo.play();
-  if(!captureVideo.videoWidth||!captureVideo.videoHeight)await new Promise(function(resolve){setTimeout(resolve,250)});
-  if(!captureVideo.videoWidth||!captureVideo.videoHeight)throw new Error("The captured tab did not provide a video frame.");
-  var stage=$("viewer-stage").getBoundingClientRect();
-  var overlay=$("clip-overlay");overlay.style.left=stage.left+"px";overlay.style.top=stage.top+"px";overlay.style.width=stage.width+"px";overlay.style.height=stage.height+"px";
-  selecting=true;dragStart=null;document.body.classList.add("clipping");
- }catch(error){
-  stopScreenCapture();
-  if(error&&error.name==="NotAllowedError")return;
-  alert("Could not start screen capture. Try taking a screenshot and choosing it from your gallery instead.");
- }
+function startClipSelection(){
+ /* Scribd is cross-origin, so the embedded page cannot be read or captured directly.
+    Use a user-selected screenshot instead of requesting repeated screen-share permission. */
+ openScreenshotPicker();
 }
 function savePinnedClip(data){
  try{sessionStorage.setItem(PIN_KEY,JSON.stringify(data));return true;}catch(e){return false;}
 }
 function pinCanvas(canvas,sourceLabel){
  try{
-  var data={image:canvas.toDataURL("image/jpeg",0.9),title:doc.title+(sourceLabel?" · "+sourceLabel:""),page:$("page").value||"1",left:14,top:112};
+  var data={image:canvas.toDataURL("image/jpeg",0.92),title:doc.title+(sourceLabel?" · "+sourceLabel:""),page:$("page").value||"1",left:14,top:112};
   showPinnedClip(data);
-  if(!savePinnedClip(data))alert("The clip is pinned for this page, but your browser could not save it for the next PDF. Try a smaller selection.");
+  if(!savePinnedClip(data))alert("The clip is ready, but this browser could not keep it for the next PDF. Try a smaller selection.");
  }catch(e){alert("Could not create the clip. Please select a smaller area and try again.");}
 }
+function makeClipPdf(dataUrl){
+ var base64=dataUrl.split(",")[1],raw=atob(base64),jpg=new Uint8Array(raw.length);
+ for(var i=0;i<raw.length;i++)jpg[i]=raw.charCodeAt(i);
+ var probe=new Image();return new Promise(function(resolve,reject){
+  probe.onload=function(){
+   var w=probe.naturalWidth,h=probe.naturalHeight;
+   var content="q\\n"+w+" 0 0 "+h+" 0 0 cm\\n/Im0 Do\\nQ";
+   var objects=[
+    "<< /Type /Catalog /Pages 2 0 R >>",
+    "<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+    "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 "+w+" "+h+"] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>",
+    "<< /Type /XObject /Subtype /Image /Width "+w+" /Height "+h+" /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length "+jpg.length+" >>\\nstream\\n"+Array.from(jpg,function(b){return String.fromCharCode(b)}).join("")+"\\nendstream",
+    "<< /Length "+content.length+" >>\\nstream\\n"+content+"\\nendstream"
+   ];
+   var pdf="%PDF-1.4\\n%âãÏÓ\\n",offsets=[0];
+   objects.forEach(function(obj,i){offsets.push(pdf.length);pdf+=(i+1)+" 0 obj\\n"+obj+"\\nendobj\\n";});
+   var xref=pdf.length;pdf+="xref\\n0 6\\n0000000000 65535 f \\n";
+   for(var j=1;j<=5;j++)pdf+=String(offsets[j]).padStart(10,"0")+" 00000 n \\n";
+   pdf+="trailer\\n<< /Size 6 /Root 1 0 R >>\\nstartxref\\n"+xref+"\\n%%EOF";
+   var bytes=new Uint8Array(pdf.length);for(var k=0;k<pdf.length;k++)bytes[k]=pdf.charCodeAt(k)&255;
+   resolve(new Blob([bytes],{type:"application/pdf"}));
+  };
+  probe.onerror=reject;probe.src=dataUrl;
+ });
+}
 function showPinnedClip(data){
- clipData=data;
+ clipData=data;clipZoom=1;
  $("pinned-image").src=data.image;
+ if(clipPdfUrl){URL.revokeObjectURL(clipPdfUrl);clipPdfUrl=null;}
+ makeClipPdf(data.image).then(function(blob){if(clipData===data){clipPdfUrl=URL.createObjectURL(blob);}}).catch(function(){clipPdfUrl=null;});
  var label=(data.title||"PDF reference")+(data.page?" · p. "+data.page:"");
  $("clip-card-title").textContent=label;
  $("pinned-clip").classList.remove("minimized");
@@ -317,8 +341,16 @@ $("clip-minimize").addEventListener("click",function(){
  var card=$("pinned-clip"),mini=card.classList.toggle("minimized");
  this.textContent=mini?"+":"−";this.title=mini?"Expand":"Minimize";this.setAttribute("aria-label",mini?"Expand clip":"Minimize clip");
 });
+function applyClipZoom(){ $("pinned-image").style.width=(clipZoom*100)+"%";$("pinned-image").style.maxWidth="none"; }
+$("clip-zoom-in").addEventListener("click",function(){clipZoom=Math.min(4,clipZoom+0.2);applyClipZoom();});
+$("clip-zoom-out").addEventListener("click",function(){clipZoom=Math.max(0.4,clipZoom-0.2);applyClipZoom();});
+$("clip-fit").addEventListener("click",function(){clipZoom=1;var img=$("pinned-image");img.style.width="100%";img.style.maxWidth="100%";});
+$("clip-download").addEventListener("click",function(){
+ if(!clipData)return;
+ makeClipPdf(clipData.image).then(function(blob){var url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="LiteFile-clip-page-"+(clipData.page||"1")+".pdf";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},1500);}).catch(function(){alert("Could not create the PDF file.");});
+});
 $("clip-close").addEventListener("click",function(){
- $("pinned-clip").style.display="none";clipData=null;try{sessionStorage.removeItem(PIN_KEY)}catch(e){}
+ $("pinned-clip").style.display="none";clipData=null;if(clipPdfUrl){URL.revokeObjectURL(clipPdfUrl);clipPdfUrl=null;}try{sessionStorage.removeItem(PIN_KEY)}catch(e){}
 });
 window.addEventListener("resize",function(){
  var card=$("pinned-clip");if(card.style.display==="none")return;
