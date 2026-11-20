@@ -112,7 +112,6 @@ body.clipping #pinned-clip{display:none!important}
       <button class="clip-card-btn" id="clip-zoom-out" type="button" aria-label="Zoom out" title="Zoom out">−</button>
       <button class="clip-card-btn" id="clip-zoom-in" type="button" aria-label="Zoom in" title="Zoom in">+</button>
       <button class="clip-card-btn" id="clip-fit" type="button" aria-label="Fit clip" title="Fit to window">↔</button>
-      <button class="clip-card-btn" id="clip-download" type="button" aria-label="Download clipped PDF" title="Download as PDF">↓</button>
       <button class="clip-card-btn" id="clip-maximize" type="button" aria-label="Maximize clip" title="Maximize / restore">□</button>
       <button class="clip-card-btn" id="clip-minimize" type="button" aria-label="Minimize clip" title="Minimize">−</button>
       <button class="clip-card-btn" id="clip-close" type="button" aria-label="Remove pinned clip" title="Remove">×</button>
@@ -261,7 +260,8 @@ function captureSelectedArea(x,y,w,h){
  if(!captureVideo||!captureVideo.videoWidth){cancelClipSelection();return;}
  /* Hide the selection tint before taking the frame so the pinned image stays clean. */
  selecting=false;document.body.classList.remove("clipping");$("clip-selection").style.display="none";$("clip-overlay").style.display="none";$("clip-overlay").style.pointerEvents="none";$("clip-overlay").style.cursor="default";
- requestAnimationFrame(function(){setTimeout(function(){captureSelectedAreaFrame(x,y,w,h);},120);});
+ /* Let the browser deliver clean post-overlay frames from the captured tab before freezing the crop. */
+ requestAnimationFrame(function(){requestAnimationFrame(function(){setTimeout(function(){captureSelectedAreaFrame(x,y,w,h);},350);});});
 }
 function captureSelectedAreaFrame(x,y,w,h){
  if(!captureVideo||!captureVideo.videoWidth){cancelClipSelection();return;}
@@ -383,10 +383,6 @@ $("clip-maximize").addEventListener("click",function(){
  var card=$("pinned-clip"),maxed=card.classList.toggle("maximized");
  if(maxed){restoreCardBounds={left:card.style.left,top:card.style.top,width:card.style.width,height:card.style.height};this.textContent="❐";}
  else{if(restoreCardBounds){card.style.left=restoreCardBounds.left;card.style.top=restoreCardBounds.top;card.style.width=restoreCardBounds.width;card.style.height=restoreCardBounds.height;}this.textContent="□";}
-});
-$("clip-download").addEventListener("click",function(){
- if(!clipData)return;
- makeClipPdf(clipData.image).then(function(blob){var url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="LiteFile-clip-page-"+(clipData.page||"1")+".pdf";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},1500);}).catch(function(){alert("Could not create the PDF file.");});
 });
 $("clip-close").addEventListener("click",function(){
  $("pinned-clip").style.display="none";clipData=null;if(clipPdfUrl){URL.revokeObjectURL(clipPdfUrl);clipPdfUrl=null;}try{sessionStorage.removeItem(PIN_KEY)}catch(e){}
