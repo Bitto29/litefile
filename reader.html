@@ -281,11 +281,27 @@ function captureSelectedArea(x,y,w,h){
 }
 function captureSelectedAreaFrame(x,y,w,h){
  if(!captureVideo||!captureVideo.videoWidth){cancelClipSelection();return;}
- var stage=$("viewer-stage").getBoundingClientRect();
- var sx=(stage.left+x)*(captureVideo.videoWidth/window.innerWidth);
- var sy=(stage.top+y)*(captureVideo.videoHeight/window.innerHeight);
- var sw=w*(captureVideo.videoWidth/window.innerWidth);
- var sh=h*(captureVideo.videoHeight/window.innerHeight);
+ var track=captureStream&&captureStream.getVideoTracks()[0];
+ var settings=track&&track.getSettings?track.getSettings():{};
+ var surface=settings.displaySurface||"monitor";
+ var scaleX,scaleY,originX=0,originY=0;
+ if(surface==="browser"){
+  /* A shared browser tab contains the page viewport, not browser chrome. */
+  scaleX=captureVideo.videoWidth/window.innerWidth;
+  scaleY=captureVideo.videoHeight/window.innerHeight;
+ }else{
+  /* A shared window/monitor includes the browser's position on the desktop. */
+  var sideInset=Math.max(0,(window.outerWidth-window.innerWidth)/2);
+  var topInset=Math.max(0,window.outerHeight-window.innerHeight-sideInset);
+  originX=window.screenX+sideInset;
+  originY=window.screenY+topInset;
+  scaleX=captureVideo.videoWidth/(window.screen.width||window.innerWidth);
+  scaleY=captureVideo.videoHeight/(window.screen.height||window.innerHeight);
+ }
+ var sx=(originX+x)*scaleX;
+ var sy=(originY+y)*scaleY;
+ var sw=w*scaleX;
+ var sh=h*scaleY;
  sx=Math.max(0,Math.min(sx,captureVideo.videoWidth-1));sy=Math.max(0,Math.min(sy,captureVideo.videoHeight-1));
  sw=Math.max(1,Math.min(sw,captureVideo.videoWidth-sx));sh=Math.max(1,Math.min(sh,captureVideo.videoHeight-sy));
  var scale=Math.min(1,1200/Math.max(sw,sh));
