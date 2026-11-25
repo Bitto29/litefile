@@ -22,6 +22,7 @@ h1{margin:0 0 7px;font-size:28px;font-weight:650}.sub{margin:0 0 25px;color:var(
 .share{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border:1px solid var(--line);border-radius:9px;background:transparent;color:var(--muted);cursor:pointer}.share:hover{border-color:var(--accent);color:var(--accent)}
 .folder-back{display:inline-flex;align-items:center;gap:8px;margin:0 0 20px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--text);text-decoration:none;font-size:14px}
 .empty{padding:26px 14px;color:var(--muted);font-size:14px}
+ .extra-links{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:9px}.drive-preview{color:var(--accent);font-size:13px;text-decoration:none}.drive-preview:hover{text-decoration:underline}.copy-password{padding:0;border:0;background:none;color:var(--muted);font-size:13px;cursor:pointer}.copy-password:hover{color:var(--accent)}
 @media(max-width:600px){header{height:58px}main{padding:24px 14px 40px}h1{font-size:26px}.row{padding:11px 7px;gap:11px}.item-title{font-size:15px}}
 </style>
 </head>
@@ -66,14 +67,17 @@ function folder(name){
 $("folderBack").hidden=false;$("heading").textContent=name;$("description").textContent="Documents in this folder.";
 $("folderBack").href="index.html";
 var entries=docs.filter(function(d){return d.folder===name});
+var showDriveTools=name==="ভার্সিটি ক প্রিপারেশন বুক ২০২৫-২৬";
 $("items").innerHTML=entries.length?entries.map(function(d){
-return '<div class="row"><div class="file-icon"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6zM14 3v5h5M9 12h6M9 16h6"/></svg></div><a class="open item-main" href="reader.html?id='+encodeURIComponent(d.id)+'"><div class="item-title">'+esc(d.title)+'</div><div class="item-sub">'+esc(d.description||"Open document")+'</div></a><button class="share" data-share="'+esc(d.id)+'" aria-label="Share '+esc(d.title)+'" title="Share"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.7 6.6-4.4M8.7 13.3l6.6 4.4"/></svg></button></div>'
+var tools=showDriveTools&&d.drivePreviewUrl?'<div class="extra-links"><a class="drive-preview" href="'+esc(d.drivePreviewUrl)+'" target="_blank" rel="noopener">Google Drive Preview ↗</a><button class="copy-password" data-password="'+esc(d.password||"")+'" type="button">Copy Password</button></div>':'';
+return '<div class="row"><div class="file-icon"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6zM14 3v5h5M9 12h6M9 16h6"/></svg></div><div class="item-main"><a class="open" href="reader.html?id='+encodeURIComponent(d.id)+'"><div class="item-title">'+esc(d.title)+'</div><div class="item-sub">'+esc(d.description||"Open document")+'</div></a>'+tools+'</div><button class="share" data-share="'+esc(d.id)+'" aria-label="Share '+esc(d.title)+'" title="Share"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.7 6.6-4.4M8.7 13.3l6.6 4.4"/></svg></button></div>'
 }).join(""):'<div class="empty">No documents in this folder yet.</div>';
 }
 $("items").addEventListener("click",function(e){
-var f=e.target.closest("[data-folder]"),s=e.target.closest("[data-share]");
+var f=e.target.closest("[data-folder]"),s=e.target.closest("[data-share]"),p=e.target.closest("[data-password]");
 if(f){folder(f.getAttribute("data-folder"));history.replaceState(null,"","#folder="+encodeURIComponent(f.getAttribute("data-folder")))}
 if(s){var d=docs.find(function(x){return x.id===s.getAttribute("data-share")});if(d)share(d)}
+if(p){var password=p.getAttribute("data-password");if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(password).then(function(){p.textContent="Copied!"}).catch(function(){prompt("Copy password:",password)})}else{prompt("Copy password:",password)}}
 });
 $("folderBack").addEventListener("click",function(e){e.preventDefault();history.replaceState(null,"",location.pathname+location.search);folders()});
 var m=location.hash.match(/^#folder=(.*)$/);
