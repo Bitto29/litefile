@@ -186,7 +186,9 @@ window.LITEFILE_DOCS = [
     folder: "ভার্সিটি ক প্রিপারেশন বুক ২০২৫-২৬",
     description: "পদার্থবিজ্ঞান ১ম পত্র",
     embedUrl: "https://www.scribd.com/embeds/1100510276/content?start_page=1&view_mode=scroll&access_key=key-Sip3cQV9zNDkXyNNLHqx",
-    sourceUrl: "https://www.scribd.com/document/1100510276/"
+    sourceUrl: "https://www.scribd.com/document/1100510276/",
+    drivePreviewUrl: "https://drive.google.com/file/d/1T_VHfIB852t1zwYqAFcpbXswSv5yXwu_/view?usp=drivesdk",
+    password: "Educationblog24.com"
   },
   {
     id: "varsity-ka-physics-2nd-2025-26",
@@ -194,7 +196,9 @@ window.LITEFILE_DOCS = [
     folder: "ভার্সিটি ক প্রিপারেশন বুক ২০২৫-২৬",
     description: "পদার্থবিজ্ঞান ২য় পত্র",
     embedUrl: "https://www.scribd.com/embeds/1100510044/content?start_page=1&view_mode=scroll&access_key=key-27Pdg3ay48Mqg5xm1rxN",
-    sourceUrl: "https://www.scribd.com/document/1100510044/"
+    sourceUrl: "https://www.scribd.com/document/1100510044/",
+    drivePreviewUrl: "https://drive.google.com/file/d/1XkgmMCUNyvRcTU4QUUyxgJPhrz-47RWy/view?usp=drivesdk",
+    password: "Educationblog24.com"
   },
   {
     id: "varsity-ka-higher-math-1st-2025-26",
@@ -202,7 +206,9 @@ window.LITEFILE_DOCS = [
     folder: "ভার্সিটি ক প্রিপারেশন বুক ২০২৫-২৬",
     description: "উচ্চতর গণিত ১ম পত্র",
     embedUrl: "https://www.scribd.com/embeds/1100513849/content?start_page=1&view_mode=scroll&access_key=key-Rk20bRoBrpH8sXVWAK9f",
-    sourceUrl: "https://www.scribd.com/document/1100513849/"
+    sourceUrl: "https://www.scribd.com/document/1100513849/",
+    drivePreviewUrl: "https://drive.google.com/file/d/14yJYxYpn0oV8TjCT65G_pIUZfZ7kAq4S/view?usp=drivesdk",
+    password: "Educationblog24.com"
   },
   {
     id: "varsity-ka-higher-math-2nd-2025-26",
@@ -210,7 +216,9 @@ window.LITEFILE_DOCS = [
     folder: "ভার্সিটি ক প্রিপারেশন বুক ২০২৫-২৬",
     description: "উচ্চতর গণিত ২য় পত্র",
     embedUrl: "https://www.scribd.com/embeds/1100514004/content?start_page=1&view_mode=scroll&access_key=key-32W0SBCYjjBZOe0hEhhE",
-    sourceUrl: "https://www.scribd.com/document/1100514004/"
+    sourceUrl: "https://www.scribd.com/document/1100514004/",
+    drivePreviewUrl: "https://drive.google.com/file/d/1Rm4W2ShCLnf_edeghWmhrc7I1H7AD5XD/view?usp=drivesdk",
+    password: "Educationblog24.com"
   },
   {
     id: "varsity-ka-chemistry-1st-2025-26",
@@ -218,7 +226,9 @@ window.LITEFILE_DOCS = [
     folder: "ভার্সিটি ক প্রিপারেশন বুক ২০২৫-২৬",
     description: "রসায়ন ১ম পত্র",
     embedUrl: "https://www.scribd.com/embeds/1100515218/content?start_page=1&view_mode=scroll&access_key=key-otxxy5DvS4I6WpLWjkSN",
-    sourceUrl: "https://www.scribd.com/document/1100515218/"
+    sourceUrl: "https://www.scribd.com/document/1100515218/",
+    drivePreviewUrl: "https://drive.google.com/file/d/1sBt75p4GrrSOvb1e7CgkxRXYHuSsOt8Y/view?usp=drivesdk",
+    password: "Educationblog24.com"
   },
   {
     id: "varsity-ka-chemistry-2nd-2025-26",
@@ -226,6 +236,8 @@ window.LITEFILE_DOCS = [
     folder: "ভার্সিটি ক প্রিপারেশন বুক ২০২৫-২৬",
     description: "রসায়ন ২য় পত্র",
     embedUrl: "https://www.scribd.com/embeds/1100515647/content?start_page=1&view_mode=scroll&access_key=key-i7l4XD4xdP6MObngS2Cb",
-    sourceUrl: "https://www.scribd.com/document/1100515647/"
+    sourceUrl: "https://www.scribd.com/document/1100515647/",
+    drivePreviewUrl: "https://drive.google.com/file/d/130dVse25JSwZQTMNKTYp_UUsM3TGl00s/view?usp=drivesdk",
+    password: "Educationblog24.com"
   }
 ];
