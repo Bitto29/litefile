@@ -178,4 +178,55 @@ window.LITEFILE_DOCS = [
     embedUrl: "https://www.scribd.com/embeds/1097137355/content?start_page=1&view_mode=scroll&access_key=key-v7vyJ9LoEfHZBPCXdv8q",
     sourceUrl: "https://www.scribd.com/document/1097137355/Bangla-2nd-paper-supplement-2027-pdf#from_embed"
   }
+,
+
+  // ভার্সিটি ক প্রিপারেশন বুক ২০২৫-২৬
+  {
+    "id": "varsity-ka-physics-1st-2025-26",
+    "title": "পদার্থবিজ্ঞান ১ম পত্র ভার্সিটি ক প্রিপারেশন বুক ২০২৫-২৬.pdf",
+    "folder": "ভার্সিটি ক প্রিপারেশন বুক ২০২৫-২৬",
+    "description": "পদার্থবিজ্ঞান ১ম পত্র",
+    "embedUrl": "https://www.scribd.com/embeds/1100510276/content?start_page=1&view_mode=scroll&access_key=key-Sip3cQV9zNDkXyNNLHqx",
+    "sourceUrl": "https://www.scribd.com/document/1100510276/"
+  },
+  {
+    "id": "varsity-ka-physics-2nd-2025-26",
+    "title": "পদার্থ বিজ্ঞান ২য় পত্র ভার্সিটি ক প্রিপারেশন বুক ২০২৫-২৬.pdf",
+    "folder": "ভার্সিটি ক প্রিপারেশন বুক ২০২৫-২৬",
+    "description": "পদার্থবিজ্ঞান ২য় পত্র",
+    "embedUrl": "https://www.scribd.com/embeds/1100510044/content?start_page=1&view_mode=scroll&access_key=key-27Pdg3ay48Mqg5xm1rxN",
+    "sourceUrl": "https://www.scribd.com/document/1100510044/"
+  },
+  {
+    "id": "varsity-ka-higher-math-1st-2025-26",
+    "title": "উচ্চতর গণিত ১ম পত্র ভার্সিটি ক প্রিপারেশন বুক ২০২৫-২৬.pdf",
+    "folder": "ভার্সিটি ক প্রিপারেশন বুক ২০২৫-২৬",
+    "description": "উচ্চতর গণিত ১ম পত্র",
+    "embedUrl": "https://www.scribd.com/embeds/1100513849/content?start_page=1&view_mode=scroll&access_key=key-Rk20bRoBrpH8sXVWAK9f",
+    "sourceUrl": "https://www.scribd.com/document/1100513849/"
+  },
+  {
+    "id": "varsity-ka-higher-math-2nd-2025-26",
+    "title": "উচ্চতর গণিত ২য় পত্র ভার্সিটি ক প্রিপারেশন বুক ২০২৫-২৬.pdf",
+    "folder": "ভার্সিটি ক প্রিপারেশন বুক ২০২৫-২৬",
+    "description": "উচ্চতর গণিত ২য় পত্র",
+    "embedUrl": "https://www.scribd.com/embeds/1100514004/content?start_page=1&view_mode=scroll&access_key=key-32W0SBCYjjBZOe0hEhhE",
+    "sourceUrl": "https://www.scribd.com/document/1100514004/"
+  },
+  {
+    "id": "varsity-ka-chemistry-1st-2025-26",
+    "title": "রসায়ন ১ম পত্র ভার্সিটি ক প্রিপারেশন বুক ২০২৫-২৬.pdf",
+    "folder": "ভার্সিটি ক প্রিপারেশন বুক ২০২৫-২৬",
+    "description": "রসায়ন ১ম পত্র",
+    "embedUrl": "https://www.scribd.com/embeds/1100515218/content?start_page=1&view_mode=scroll&access_key=key-otxxy5DvS4I6WpLWjkSN",
+    "sourceUrl": "https://www.scribd.com/document/1100515218/"
+  },
+  {
+    "id": "varsity-ka-chemistry-2nd-2025-26",
+    "title": "রসায়ন ২য় পত্র ভার্সিটি ক প্রিপারেশন বুক ২০২৫-২৬.pdf",
+    "folder": "ভার্সিটি ক প্রিপারেশন বুক ২০২৫-২৬",
+    "description": "রসায়ন ২য় পত্র",
+    "embedUrl": "https://www.scribd.com/embeds/1100515647/content?start_page=1&view_mode=scroll&access_key=key-i7l4XD4xdP6MObngS2Cb",
+    "sourceUrl": "https://www.scribd.com/document/1100515647/"
+  }
 ];
